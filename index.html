@@ -12,16 +12,21 @@
 
   <style>
     :root{
-      --ink:#0b1020;
-      --bg1:#0a0f2b;
-      --bg2:#1d1b52;
-      --card:#121a3b;
-      --glass:rgba(255,255,255,.06);
-      --muted:#9fb0d6;
-      --text:#eaf0ff;
-      --accent1:#7c3aed; /* violet */
-      --accent2:#22d3ee; /* cyan */
-      --accent3:#fb7185; /* pink/red */
+      /* RenoChain brand-inspired palette (greens) */
+      --ink:#131a14;          /* deep ink for outlines */
+      --bg1:#0f1b14;          /* deep forest */
+      --bg2:#1a2b20;          /* dark moss */
+      --card:#13251b;         /* card background */
+      --glass:rgba(255,255,255,.05);
+    
+      --muted:#bfd7bf;        /* soft sage for helper text */
+      --text:#f3fff5;         /* near-white with green tint */
+    
+      /* Accents from logo */
+      --accent1:#9bd84f;      /* light lime/green (logo) */
+      --accent2:#6cc24a;      /* mid green (logo) */
+      --accent3:#d9eba7;      /* pale ring green */
+    
       --ok:#34d399;
       --err:#f87171;
     }
@@ -32,14 +37,14 @@
       font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;
       color:var(--text);
       background:
-        radial-gradient(1000px 700px at 15% -10%, rgba(124,58,237,.35), transparent 60%),
-        radial-gradient(900px 700px at 110% 10%, rgba(34,211,238,.25), transparent 60%),
+        radial-gradient(1000px 700px at 15% -10%, rgba(155,216,79,.28), transparent 60%),
+        radial-gradient(900px 700px at 110% 10%, rgba(108,194,74,.22), transparent 60%),
         linear-gradient(160deg, var(--bg1), var(--bg2));
     }
     .shell{max-width:1100px;margin:0 auto;padding:28px}
     header{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px}
     .brand{display:flex;align-items:center;gap:12px}
-    .brand img{height:44px;width:auto;border-radius:10px;background:#fff}
+    .brand img{height:44px;width:auto;border-radius:10px}
     .brand h1{font-size:20px;margin:0}
     .tag{font-size:12px;color:var(--muted)}
 
@@ -87,7 +92,7 @@
       appearance:none;border:0;border-radius:12px;padding:13px 16px;width:100%;
       font-weight:800;letter-spacing:.02em;cursor:pointer;color:#05101a;
       background:linear-gradient(135deg, var(--accent2), var(--accent1));
-      box-shadow:0 10px 28px rgba(124,58,237,.35), 0 6px 18px rgba(34,211,238,.2);
+      box-shadow:0 10px 28px rgba(108,194,74,.35), 0 6px 18px rgba(155,216,79,.25);
       transition:transform .05s ease;
       margin-top:10px
     }
@@ -145,7 +150,6 @@
             <img src="STC.png" alt="Partner STC" />
             <img src="SABO.jpg" alt="Partner SABO" />
             <img src="EMD.webp" alt="Partner EMD" />
-            <img src="RenoChainLogo.png" alt="RenoChain" />
           </div>
         </div>
       </div>
