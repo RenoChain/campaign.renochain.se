@@ -84,6 +84,16 @@
       width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.15);
       background:rgba(255,255,255,.05);color:var(--text);outline:none
     }
+    /* better visibility for the role dropdown */
+    select {
+      background: rgba(255, 255, 255, 0.15); /* slightly lighter so it's visible */
+      color: var(--text);
+    }
+    
+    select option:first-child {
+      color: #9ca3af; /* muted grey placeholder */
+    }
+
     input::placeholder, textarea::placeholder{color:#a9b7e3}
     .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     @media (max-width: 520px){.row{grid-template-columns:1fr}}
