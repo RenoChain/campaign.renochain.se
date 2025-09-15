@@ -115,6 +115,12 @@
     @media (max-width: 480px){.logos{grid-template-columns:repeat(2,1fr)}}
     footer{margin:24px 0 8px;text-align:center;color:var(--muted);font-size:12px}
     a{color:#d2e4ff}
+    
+    /* language switcher */
+  .lang-switch{display:flex;gap:8px}
+  .lang{padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.2);
+    background:rgba(255,255,255,.05);color:var(--text);cursor:pointer;font-weight:700}
+  .lang.active{background:linear-gradient(135deg,var(--accent2),var(--accent1));color:#07120a;border-color:transparent}
   </style>
 </head>
 <body>
@@ -129,14 +135,19 @@
           <div class="tag">Million Program Renovation — Video Showcase</div>
         </div>
       </div>
+      <!-- EN/SV language switcher -->
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" data-lang="en" class="lang active">EN</button>
+        <button type="button" data-lang="sv" class="lang">SV</button>
+      </div>
     </header>
 
     <!-- Hero & Form -->
     <section class="hero">
       <div class="teaser">
-        <div class="headline">Unlock the full-length video</div>
-        <p class="lede">A deep dive into scalable, cost-efficient renovation — methods, partners, and lessons learned.</p>
-
+        <div class="headline" id="headline">Unlock the full-length video</div>
+        <p class="lede" id="lede">A deep dive into scalable, cost-efficient renovation — methods, partners, and lessons learned.</p>
+        
         <div class="video" aria-label="Teaser image">
           <!-- 🔁 Replace with your own cover image or short muted video -->
           <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1400&auto=format&fit=crop" alt="RenoChain video teaser" />
@@ -144,7 +155,7 @@
 
         <!-- Partners -->
         <div class="partners">
-          <h3>In collaboration with</h3>
+          <h3 id="collab">In collaboration with</h3>
           <div class="logos">
             <img src="WFT.png" alt="Partner WFT" />
             <img src="STC.png" alt="Partner STC" />
@@ -156,18 +167,18 @@
 
       <div class="form-card">
         <form id="gateForm" novalidate>
-          <label for="name">Full name</label>
+          <label for="name" id="label-name">Full name</label>
           <input id="name" name="name" placeholder="Jane Doe" required />
           <div class="err" data-err="name"></div>
 
           <div class="row">
             <div>
-              <label for="email">Work email</label>
+              <label for="email" id="label-email">Work email</label>
               <input id="email" name="email" type="email" placeholder="jane@acme.se" required />
               <div class="err" data-err="email"></div>
             </div>
             <div>
-              <label for="phone">Phone</label>
+              <label for="phone" id="label-phone">Phone</label>
               <input id="phone" name="phone" type="tel" placeholder="+46 70 123 45 67" />
               <div class="err" data-err="phone"></div>
             </div>
@@ -175,14 +186,14 @@
 
           <div class="row">
             <div>
-              <label for="company">Company</label>
+              <label for="company" id="label-company">Company</label>
               <input id="company" name="company" placeholder="Acme AB" required />
               <div class="err" data-err="company"></div>
             </div>
             <div>
-              <label for="role">Role</label>
+              <label for="role" id="label-role">Role</label>
               <select id="role" name="role">
-                <option value="">Select your role</option>
+                <option value="" id="role-placeholder">Select your role</option>
                 <option>CEO / Founder</option>
                 <option>Operations</option>
                 <option>Procurement</option>
@@ -194,12 +205,12 @@
             </div>
           </div>
 
-          <label for="notes">What are you hoping to learn?</label>
+          <label for="notes" id="label-notes">What are you hoping to learn?</label>
           <textarea id="notes" name="notes" rows="3" placeholder="Optional"></textarea>
 
           <div class="consent">
             <input type="checkbox" id="consent" name="consent" required />
-            <label for="consent">I agree to the processing of my personal data for accessing this content and follow-up about related services.</label>
+            <label for="consent" id="consent-text">I agree to the processing of my personal data for accessing this content and follow-up about related services.</label>
           </div>
           <div class="err" data-err="consent"></div>
 
@@ -216,7 +227,7 @@
           <input type="hidden" name="landing_url" id="landing_url" />
           <input type="hidden" name="user_agent" id="user_agent" />
 
-          <button class="btn" type="submit">Unlock & Watch</button>
+          <button class="btn" type="submit" id="submit-btn">Unlock & Watch</button>
           <div class="ok" id="okMsg">Thanks! Redirecting…</div>
         </form>
       </div>
@@ -227,59 +238,173 @@
     </footer>
   </div>
 
-  <script>
-    // ========= CONFIG: Replace with your values =========
-    const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbzA0Xe1K2pbpH_ox1T-P7gKrwbSvGk4mh2mmWV74OtxaRkB_4Z8HVTj8zdKYeEVwbiwwg/exec"; // e.g., https://script.google.com/macros/s/xxxxx/exec
-    const VIDEO_URL   = "https://xqnnv.beeweb-orange.io/";          // your main page
-    // ====================================================
+<script>
+  // --- Language dictionary (EN/SV) ---
+  const i18n = {
+    en: {
+      headline: "Unlock the full-length video",
+      lede: "A deep dive into scalable, cost-efficient renovation — methods, partners, and lessons learned.",
+      collab: "In collaboration with",
 
-    // Fill year
-    document.getElementById('yr').textContent = new Date().getFullYear();
+      "label-name": "Full name",
+      "label-email": "Work email",
+      "label-phone": "Phone",
+      "label-company": "Company",
+      "label-role": "Role",
+      "label-notes": "What are you hoping to learn?",
+      "role-placeholder": "Select your role",
+      "consent-text": "I agree to the processing of my personal data for accessing this content and follow-up about related services.",
+      "submit-btn": "Unlock & Watch",
 
-    // Capture UTMs + context automatically
-    const params = new URLSearchParams(location.search);
-    const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ""; };
-    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].forEach(k => setVal(k, params.get(k)));
-    setVal("referrer", document.referrer || "");
-    setVal("landing_url", location.href);
-    setVal("user_agent", navigator.userAgent || "");
+      // placeholders
+      ph_name: "Jane Doe",
+      ph_email: "jane@acme.se",
+      ph_phone: "+46 70 123 45 67",
+      ph_company: "Acme AB",
+      ph_notes: "Optional",
 
-    // Basic validators
-    const emailOk = v => /.+@.+\..+/.test(v);
-    const phoneOk = v => !v || /^(\+\d{6,15}|\d{6,15}|\(\\+?\d+\)[\d\s-]+)$/.test(v);
+      // role options
+      roles: ["CEO / Founder","Operations","Procurement","Project Manager","Engineer","Sales / Marketing","Other"]
+    },
+    sv: {
+      headline: "Lås upp hela videon",
+      lede: "En fördjupning i skalbar, kostnadseffektiv renovering — metoder, partners och lärdomar.",
+      collab: "I samarbete med",
 
-    const form = document.getElementById("gateForm");
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const data = new FormData(form);
+      "label-name": "Fullständigt namn",
+      "label-email": "Arbetsmejl",
+      "label-phone": "Telefon",
+      "label-company": "Företag",
+      "label-role": "Roll",
+      "label-notes": "Vad vill du få ut?",
+      "role-placeholder": "Välj din roll",
+      "consent-text": "Jag samtycker till att mina personuppgifter behandlas för att få tillgång till detta innehåll och för uppföljning om relaterade tjänster.",
+      "submit-btn": "Lås upp och titta",
 
-      // honeypot
-      if (data.get("website")) return;
+      // placeholders
+      ph_name: "Anna Svensson",
+      ph_email: "anna@acme.se",
+      ph_phone: "+46 70 123 45 67",
+      ph_company: "Acme AB",
+      ph_notes: "Valfritt",
 
-      const errs = {};
-      if (!(data.get("name")||"").trim()) errs.name = "Please enter your name.";
-      if (!emailOk(data.get("email")||"")) errs.email = "Enter a valid email.";
-      if (!(data.get("company")||"").trim()) errs.company = "Please enter your company.";
-      if (!phoneOk(data.get("phone")||"")) errs.phone = "Enter a valid phone, or leave blank.";
-      if (!form.consent.checked) errs.consent = "Consent is required.";
+      // role options
+      roles: ["VD / Grundare","Drift","Inköp","Projektledare","Ingenjör","Sälj / Marknad","Annat"]
+    }
+  };
 
-      // render errors
-      document.querySelectorAll(".err").forEach(el => el.style.display = "none");
-      Object.entries(errs).forEach(([k,msg])=>{
-        const el = document.querySelector(`.err[data-err="${k}"]`);
-        if (el){ el.textContent = msg; el.style.display = "block"; }
-      });
-      if (Object.keys(errs).length) return;
+  function applyI18n(lang){
+    const dict = i18n[lang] || i18n.en;
 
-      try{
-        await fetch(ENDPOINT_URL, { method:"POST", mode:"no-cors", body:data });
-        document.getElementById("okMsg").style.display = "block";
-        setTimeout(()=>{ window.location.href = VIDEO_URL; }, 900);
-      }catch(err){
-        alert("Something went wrong submitting the form. Please try again.");
-        console.error(err);
-      }
+    // static texts
+    const ids = ["headline","lede","collab","label-name","label-email","label-phone","label-company","label-role","label-notes","consent-text","submit-btn","role-placeholder"];
+    ids.forEach(id=>{
+      const el = document.getElementById(id);
+      if(!el) return;
+      if(id === "role-placeholder") { el.textContent = dict[id]; return; }
+      el.textContent = dict[id];
     });
-  </script>
+
+    // placeholders
+    const nameEl = document.getElementById("name");
+    const emailEl = document.getElementById("email");
+    const phoneEl = document.getElementById("phone");
+    const companyEl = document.getElementById("company");
+    const notesEl = document.getElementById("notes");
+    if(nameEl) nameEl.placeholder = dict.ph_name;
+    if(emailEl) emailEl.placeholder = dict.ph_email;
+    if(phoneEl) phoneEl.placeholder = dict.ph_phone;
+    if(companyEl) companyEl.placeholder = dict.ph_company;
+    if(notesEl) notesEl.placeholder = dict.ph_notes;
+
+    // role options
+    const roleSel = document.getElementById("role");
+    if(roleSel){
+      const placeholder = roleSel.querySelector("option#role-placeholder");
+      roleSel.innerHTML = "";
+      if (placeholder) roleSel.appendChild(placeholder);
+      dict.roles.forEach(r=>{
+        const opt = document.createElement("option");
+        opt.textContent = r;
+        roleSel.appendChild(opt);
+      });
+    }
+
+    // html lang + remember choice
+    document.documentElement.lang = lang;
+    localStorage.setItem("renochain_lang", lang);
+
+    // toggle buttons
+    document.querySelectorAll(".lang").forEach(btn=>{
+      btn.classList.toggle("active", btn.dataset.lang === lang);
+    });
+  }
+
+  // init from saved pref or browser language, and wire up clicks
+  (function initLang(){
+    const saved = localStorage.getItem("renochain_lang");
+    const fallback = (navigator.language || "en").toLowerCase().startsWith("sv") ? "sv" : "en";
+    applyI18n(saved || fallback);
+
+    document.addEventListener("click", (e)=>{
+      const btn = e.target.closest(".lang");
+      if(!btn) return;
+      applyI18n(btn.dataset.lang);
+    });
+  })();
+
+  // ========= CONFIG: Replace with your values =========
+  const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbzA0Xe1K2pbpH_ox1T-P7gKrwbSvGk4mh2mmWV74OtxaRkB_4Z8HVTj8zdKYeEVwbiwwg/exec";
+  const VIDEO_URL   = "https://xqnnv.beeweb-orange.io/";
+  // ====================================================
+
+  // Fill year
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // Capture UTMs + context automatically
+  const params = new URLSearchParams(location.search);
+  const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ""; };
+  ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].forEach(k => setVal(k, params.get(k)));
+  setVal("referrer", document.referrer || "");
+  setVal("landing_url", location.href);
+  setVal("user_agent", navigator.userAgent || "");
+
+  // Basic validators
+  const emailOk = v => /.+@.+\..+/.test(v);
+  const phoneOk = v => !v || /^(\+\d{6,15}|\d{6,15}|\(\+?\d+\)[\d\s-]+)$/.test(v);
+
+  const form = document.getElementById("gateForm");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+
+    // honeypot
+    if (data.get("website")) return;
+
+    const errs = {};
+    if (!(data.get("name")||"").trim()) errs.name = "Please enter your name.";
+    if (!emailOk(data.get("email")||"")) errs.email = "Enter a valid email.";
+    if (!(data.get("company")||"").trim()) errs.company = "Please enter your company.";
+    if (!phoneOk(data.get("phone")||"")) errs.phone = "Enter a valid phone, or leave blank.";
+    if (!form.consent.checked) errs.consent = "Consent is required.";
+
+    // render errors
+    document.querySelectorAll(".err").forEach(el => el.style.display = "none");
+    Object.entries(errs).forEach(([k,msg])=>{
+      const el = document.querySelector(`.err[data-err="${k}"]`);
+      if (el){ el.textContent = msg; el.style.display = "block"; }
+    });
+    if (Object.keys(errs).length) return;
+
+    try{
+      await fetch(ENDPOINT_URL, { method:"POST", mode:"no-cors", body:data });
+      document.getElementById("okMsg").style.display = "block";
+      setTimeout(()=>{ window.location.href = VIDEO_URL; }, 900);
+    }catch(err){
+      alert("Something went wrong submitting the form. Please try again.");
+      console.error(err);
+    }
+  });
+</script>
 </body>
 </html>
