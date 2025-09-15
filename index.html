@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RenoChain — Watch the Full Video</title>
+  <meta name="description" content="Unlock RenoChain's full-length video after a quick sign-up." />
+
+  <!-- Fonts (optional) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --ink:#0b1020;
+      --bg1:#0a0f2b;
+      --bg2:#1d1b52;
+      --card:#121a3b;
+      --glass:rgba(255,255,255,.06);
+      --muted:#9fb0d6;
+      --text:#eaf0ff;
+      --accent1:#7c3aed; /* violet */
+      --accent2:#22d3ee; /* cyan */
+      --accent3:#fb7185; /* pink/red */
+      --ok:#34d399;
+      --err:#f87171;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1000px 700px at 15% -10%, rgba(124,58,237,.35), transparent 60%),
+        radial-gradient(900px 700px at 110% 10%, rgba(34,211,238,.25), transparent 60%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+    }
+    .shell{max-width:1100px;margin:0 auto;padding:28px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{height:44px;width:auto;border-radius:10px;background:#fff}
+    .brand h1{font-size:20px;margin:0}
+    .tag{font-size:12px;color:var(--muted)}
+
+    .hero{
+      display:grid;grid-template-columns:1.2fr 1fr;gap:24px;align-items:stretch;
+    }
+    @media (max-width: 980px){.hero{grid-template-columns:1fr}}
+
+    .teaser{
+      position:relative;padding:22px;border-radius:18px;
+      background:linear-gradient(180deg, rgba(255,255,255,.06), transparent 60%), var(--card);
+      border:1px solid rgba(255,255,255,.12);
+      overflow:hidden;
+    }
+    .teaser::after{
+      content:"";position:absolute;inset:-40% -20% auto auto;height:260px;width:260px;
+      background:radial-gradient(circle at 30% 30%, rgba(34,211,238,.35), transparent 55%),
+                 radial-gradient(circle at 70% 60%, rgba(251,113,133,.35), transparent 55%);
+      filter:blur(24px);
+      transform:rotate(25deg);
+      pointer-events:none;
+    }
+    .headline{font-size:34px;line-height:1.1;margin:10px 0 8px}
+    .lede{color:var(--muted);margin:0 0 16px}
+    .video{
+      aspect-ratio:16/9;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.12);
+      background:#0b1228;margin-top:8px
+    }
+    .video img, .video video{width:100%;height:100%;object-fit:cover;display:block}
+
+    .form-card{
+      padding:22px;border-radius:18px;background:var(--glass);
+      border:1px solid rgba(255,255,255,.16);backdrop-filter: blur(6px)
+    }
+    label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
+    input, select, textarea{
+      width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.15);
+      background:rgba(255,255,255,.05);color:var(--text);outline:none
+    }
+    input::placeholder, textarea::placeholder{color:#a9b7e3}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width: 520px){.row{grid-template-columns:1fr}}
+
+    .btn{
+      appearance:none;border:0;border-radius:12px;padding:13px 16px;width:100%;
+      font-weight:800;letter-spacing:.02em;cursor:pointer;color:#05101a;
+      background:linear-gradient(135deg, var(--accent2), var(--accent1));
+      box-shadow:0 10px 28px rgba(124,58,237,.35), 0 6px 18px rgba(34,211,238,.2);
+      transition:transform .05s ease;
+      margin-top:10px
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+
+    .consent{display:flex;align-items:flex-start;gap:10px;margin-top:8px}
+    .consent input{width:auto;margin-top:3px}
+    .err{color:var(--err);font-size:12px;display:none}
+    .ok{color:var(--ok);font-size:13px;display:none;margin-top:8px}
+
+    .partners{
+      margin-top:18px;padding:16px;border-radius:14px;background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1)
+    }
+    .partners h3{font-size:12px;color:var(--muted);margin:0 0 10px;letter-spacing:.08em;text-transform:uppercase}
+    .logos{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;align-items:center}
+    .logos img{width:100%;height:38px;object-fit:contain;background:#fff;border-radius:8px;padding:6px}
+    @media (max-width: 780px){.logos{grid-template-columns:repeat(3,1fr)}}
+    @media (max-width: 480px){.logos{grid-template-columns:repeat(2,1fr)}}
+    footer{margin:24px 0 8px;text-align:center;color:var(--muted);font-size:12px}
+    a{color:#d2e4ff}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <!-- Header / Logo -->
+    <header>
+      <div class="brand">
+        <!-- 🔁 Replace with your project logo URL -->
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_TV_2015.png" alt="RenoChain logo" />
+        <div>
+          <h1 class="tag" style="margin:0; font-weight:800; letter-spacing:.05em;">RenoChain</h1>
+          <div class="tag">Million Program Renovation — Video Showcase</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero & Form -->
+    <section class="hero">
+      <div class="teaser">
+        <div class="headline">Unlock the full-length video</div>
+        <p class="lede">A deep dive into scalable, cost-efficient renovation — methods, partners, and lessons learned.</p>
+
+        <div class="video" aria-label="Teaser image">
+          <!-- 🔁 Replace with your own cover image or short muted video -->
+          <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1400&auto=format&fit=crop" alt="RenoChain video teaser" />
+        </div>
+
+        <!-- Partners -->
+        <div class="partners">
+          <h3>In collaboration with</h3>
+          <div class="logos">
+            <!-- 🔁 Replace these logo URLs with your partners' logos -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Logo-sample-01.png" alt="Partner 1" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png" alt="Partner 2" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/ae/NASA_logo.svg" alt="Partner 3" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Partner 4" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Instagram-Icon.png" alt="Partner 5" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <form id="gateForm" novalidate>
+          <label for="name">Full name</label>
+          <input id="name" name="name" placeholder="Jane Doe" required />
+          <div class="err" data-err="name"></div>
+
+          <div class="row">
+            <div>
+              <label for="email">Work email</label>
+              <input id="email" name="email" type="email" placeholder="jane@acme.se" required />
+              <div class="err" data-err="email"></div>
+            </div>
+            <div>
+              <label for="phone">Phone</label>
+              <input id="phone" name="phone" type="tel" placeholder="+46 70 123 45 67" />
+              <div class="err" data-err="phone"></div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="company">Company</label>
+              <input id="company" name="company" placeholder="Acme AB" required />
+              <div class="err" data-err="company"></div>
+            </div>
+            <div>
+              <label for="role">Role</label>
+              <select id="role" name="role">
+                <option value="">Select your role</option>
+                <option>CEO / Founder</option>
+                <option>Operations</option>
+                <option>Procurement</option>
+                <option>Project Manager</option>
+                <option>Engineer</option>
+                <option>Sales / Marketing</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+
+          <label for="notes">What are you hoping to learn?</label>
+          <textarea id="notes" name="notes" rows="3" placeholder="Optional"></textarea>
+
+          <div class="consent">
+            <input type="checkbox" id="consent" name="consent" required />
+            <label for="consent">I agree to the processing of my personal data for accessing this content and follow-up about related services.</label>
+          </div>
+          <div class="err" data-err="consent"></div>
+
+          <!-- Honeypot for bots -->
+          <input type="text" name="website" id="website" class="hp" style="position:absolute;left:-9999px;top:-9999px" tabindex="-1" autocomplete="off" />
+
+          <!-- Hidden attribution fields (auto-filled by JS) -->
+          <input type="hidden" name="utm_source" id="utm_source" />
+          <input type="hidden" name="utm_medium" id="utm_medium" />
+          <input type="hidden" name="utm_campaign" id="utm_campaign" />
+          <input type="hidden" name="utm_content" id="utm_content" />
+          <input type="hidden" name="utm_term" id="utm_term" />
+          <input type="hidden" name="referrer" id="referrer" />
+          <input type="hidden" name="landing_url" id="landing_url" />
+          <input type="hidden" name="user_agent" id="user_agent" />
+
+          <button class="btn" type="submit">Unlock & Watch</button>
+          <div class="ok" id="okMsg">Thanks! Redirecting…</div>
+        </form>
+      </div>
+    </section>
+
+    <footer>
+      © <span id="yr"></span> RenoChain — All rights reserved. · <a href="#" aria-label="Privacy policy">Privacy</a>
+    </footer>
+  </div>
+
+  <script>
+    // ========= CONFIG: Replace with your values =========
+    const ENDPOINT_URL = "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE"; // e.g., https://script.google.com/macros/s/xxxxx/exec
+    const VIDEO_URL   = "https://xqnnv.beeweb-orange.io/";          // your main page
+    // ====================================================
+
+    // Fill year
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // Capture UTMs + context automatically
+    const params = new URLSearchParams(location.search);
+    const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ""; };
+    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].forEach(k => setVal(k, params.get(k)));
+    setVal("referrer", document.referrer || "");
+    setVal("landing_url", location.href);
+    setVal("user_agent", navigator.userAgent || "");
+
+    // Basic validators
+    const emailOk = v => /.+@.+\..+/.test(v);
+    const phoneOk = v => !v || /^(\+\d{6,15}|\d{6,15}|\(\\+?\d+\)[\d\s-]+)$/.test(v);
+
+    const form = document.getElementById("gateForm");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+
+      // honeypot
+      if (data.get("website")) return;
+
+      const errs = {};
+      if (!(data.get("name")||"").trim()) errs.name = "Please enter your name.";
+      if (!emailOk(data.get("email")||"")) errs.email = "Enter a valid email.";
+      if (!(data.get("company")||"").trim()) errs.company = "Please enter your company.";
+      if (!phoneOk(data.get("phone")||"")) errs.phone = "Enter a valid phone, or leave blank.";
+      if (!form.consent.checked) errs.consent = "Consent is required.";
+
+      // render errors
+      document.querySelectorAll(".err").forEach(el => el.style.display = "none");
+      Object.entries(errs).forEach(([k,msg])=>{
+        const el = document.querySelector(`.err[data-err="${k}"]`);
+        if (el){ el.textContent = msg; el.style.display = "block"; }
+      });
+      if (Object.keys(errs).length) return;
+
+      try{
+        await fetch(ENDPOINT_URL, { method:"POST", mode:"no-cors", body:data });
+        document.getElementById("okMsg").style.display = "block";
+        setTimeout(()=>{ window.location.href = VIDEO_URL; }, 900);
+      }catch(err){
+        alert("Something went wrong submitting the form. Please try again.");
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>
