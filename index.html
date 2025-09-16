@@ -279,7 +279,16 @@
           <input type="hidden" name="referrer" id="referrer" />
           <input type="hidden" name="landing_url" id="landing_url" />
           <input type="hidden" name="user_agent" id="user_agent" />
-
+          <!-- Hidden tech + geo fields -->
+          <input type="hidden" name="operating_system" id="operating_system" />
+          <input type="hidden" name="device_type" id="device_type" />
+          <input type="hidden" name="browser" id="browser" />
+          <input type="hidden" name="platform" id="platform" />
+          <input type="hidden" name="continent" id="continent" />
+          <input type="hidden" name="country" id="country" />
+          <input type="hidden" name="region" id="region" />
+          <input type="hidden" name="city" id="city" />
+          
           <button class="btn" type="submit" id="submit-btn">Unlock & Watch</button>
           <div class="ok" id="okMsg">Thanks! Redirecting…</div>
         </form>
@@ -404,6 +413,67 @@
       if(!btn) return;
       applyI18n(btn.dataset.lang);
     });
+  })();
+
+  // ---------- Client hints: OS / device / browser / platform ----------
+  function detectOS(ua) {
+    ua = ua || navigator.userAgent;
+    if (/Windows NT/i.test(ua)) return "Windows";
+    if (/Mac OS X/i.test(ua)) return "macOS";
+    if (/\biPhone|\biPad|\biPod/i.test(ua)) return "iOS";
+    if (/Android/i.test(ua)) return "Android";
+    if (/Linux/i.test(ua)) return "Linux";
+    return "Other";
+  }
+  
+  function detectDeviceType(ua) {
+    ua = ua || navigator.userAgent;
+    if (/\b(iPad|Tablet)\b/i.test(ua)) return "Tablet";
+    if (/\b(Mobi|Android|iPhone|iPod)\b/i.test(ua)) return "Mobile";
+    return "Desktop";
+  }
+  
+  function detectBrowser(ua) {
+    ua = ua || navigator.userAgent;
+    // Order matters
+    if (/Edg\//.test(ua)) return "Edge";
+    if (/OPR\//.test(ua) || /Opera/.test(ua)) return "Opera";
+    if (/Chrome\//.test(ua)) return "Chrome";
+    if (/Safari\//.test(ua) && !/Chrome\//.test(ua)) return "Safari";
+    if (/Firefox\//.test(ua)) return "Firefox";
+    return "Other";
+  }
+  
+  (function fillClientFields(){
+    const ua = navigator.userAgent || "";
+    const platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
+  
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ""; };
+  
+    set("operating_system", detectOS(ua));
+    set("device_type",      detectDeviceType(ua));
+    set("browser",          detectBrowser(ua));
+    set("platform",         platform);
+  })();
+
+  // ---------- IP-based geolocation (approximate) ----------
+  (async function fillGeoByIP(){
+    try {
+      const resp = await fetch("https://ipapi.co/json/");
+      if (!resp.ok) return;
+      const d = await resp.json();
+      const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ""; };
+  
+      // ipapi fields: continent_code, country_name, region, city
+      set("continent", d.continent_code || "");
+      set("country",   d.country_name    || "");
+      set("region",    d.region          || "");
+      set("city",      d.city            || "");
+      // if you later add timezone column, it's d.timezone
+    } catch(e) {
+      // silently ignore if blocked/offline
+      console.warn("Geo IP lookup failed", e);
+    }
   })();
 
   // ========= CONFIG: Replace with your values =========
