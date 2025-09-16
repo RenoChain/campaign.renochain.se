@@ -302,187 +302,234 @@
   </div>
 
 <script>
-// --- Language dictionary (EN/SV) ---
-const i18n = {
-  en: { /* ...unchanged... */ },
-  sv: { /* ...unchanged... */ }
-};
+  // --- Language dictionary (EN/SV) ---
+  const i18n = {
+    en: {
+      headline: "Unlock the full-length video",
+      lede: "A deep dive into scalable, cost-efficient renovation — methods, partners, and lessons learned.",
+      collab: "In collaboration with",
 
-function applyI18n(lang){
-  const dict = i18n[lang] || i18n.en;
+      "label-name": "Full name",
+      "label-email": "Work email",
+      "label-phone": "Phone",
+      "label-company": "Company",
+      "label-role": "Role",
+      "label-notes": "What are you hoping to learn?",
+      "role-placeholder": "Select your role",
+      "consent-text": "I agree to the processing of my personal data for accessing this content and follow-up about related services.",
+      "submit-btn": "Unlock & Watch",
 
-  // static texts
-  const ids = ["headline","lede","collab","label-name","label-email","label-phone","label-company","label-role","label-notes","consent-text","submit-btn","role-placeholder"];
-  ids.forEach(id=>{
-    const el = document.getElementById(id);
-    if(!el) return;
-    if(id === "role-placeholder") { el.textContent = dict[id]; return; }
-    el.textContent = dict[id];
-  });
+      // placeholders
+      ph_name: "Jane Doe",
+      ph_email: "jane@acme.se",
+      ph_phone: "+46 70 123 45 67",
+      ph_company: "Acme AB",
+      ph_notes: "Optional",
 
-  // placeholders
-  const nameEl = document.getElementById("name");
-  const emailEl = document.getElementById("email");
-  const phoneEl = document.getElementById("phone");
-  const companyEl = document.getElementById("company");
-  const notesEl = document.getElementById("notes");
-  if(nameEl) nameEl.placeholder = dict.ph_name;
-  if(emailEl) emailEl.placeholder = dict.ph_email;
-  if(phoneEl) phoneEl.placeholder = dict.ph_phone;
-  if(companyEl) companyEl.placeholder = dict.ph_company;
-  if(notesEl) notesEl.placeholder = dict.ph_notes;
+      // role options
+      roles: ["CEO / Founder","Operations","Procurement","Project Manager","Engineer","Sales / Marketing","Other"]
+    },
+    sv: {
+      headline: "Lås upp hela videon",
+      lede: "En fördjupning i skalbar, kostnadseffektiv renovering — metoder, partners och lärdomar.",
+      collab: "I samarbete med",
 
-  // role options
-  const roleSel = document.getElementById("role");
-  if(roleSel){
-    const placeholder = roleSel.querySelector("option#role-placeholder");
-    roleSel.innerHTML = "";
-    if (placeholder) roleSel.appendChild(placeholder);
-    dict.roles.forEach(r=>{
-      const opt = document.createElement("option");
-      opt.textContent = r;
-      roleSel.appendChild(opt);
+      "label-name": "Fullständigt namn",
+      "label-email": "Arbetsmejl",
+      "label-phone": "Telefon",
+      "label-company": "Företag",
+      "label-role": "Roll",
+      "label-notes": "Vad vill du få ut?",
+      "role-placeholder": "Välj din roll",
+      "consent-text": "Jag samtycker till att mina personuppgifter behandlas för att få tillgång till detta innehåll och för uppföljning om relaterade tjänster.",
+      "submit-btn": "Lås upp och titta",
+
+      // placeholders
+      ph_name: "Anna Svensson",
+      ph_email: "anna@acme.se",
+      ph_phone: "+46 70 123 45 67",
+      ph_company: "Acme AB",
+      ph_notes: "Valfritt",
+
+      // role options
+      roles: ["VD / Grundare","Drift","Inköp","Projektledare","Ingenjör","Sälj / Marknad","Annat"]
+    }
+  };
+
+  function applyI18n(lang){
+    const dict = i18n[lang] || i18n.en;
+
+    // static texts
+    const ids = ["headline","lede","collab","label-name","label-email","label-phone","label-company","label-role","label-notes","consent-text","submit-btn","role-placeholder"];
+    ids.forEach(id=>{
+      const el = document.getElementById(id);
+      if(!el) return;
+      if(id === "role-placeholder") { el.textContent = dict[id]; return; }
+      el.textContent = dict[id];
+    });
+
+    // placeholders
+    const nameEl = document.getElementById("name");
+    const emailEl = document.getElementById("email");
+    const phoneEl = document.getElementById("phone");
+    const companyEl = document.getElementById("company");
+    const notesEl = document.getElementById("notes");
+    if(nameEl) nameEl.placeholder = dict.ph_name;
+    if(emailEl) emailEl.placeholder = dict.ph_email;
+    if(phoneEl) phoneEl.placeholder = dict.ph_phone;
+    if(companyEl) companyEl.placeholder = dict.ph_company;
+    if(notesEl) notesEl.placeholder = dict.ph_notes;
+
+    // role options
+    const roleSel = document.getElementById("role");
+    if(roleSel){
+      const placeholder = roleSel.querySelector("option#role-placeholder");
+      roleSel.innerHTML = "";
+      if (placeholder) roleSel.appendChild(placeholder);
+      dict.roles.forEach(r=>{
+        const opt = document.createElement("option");
+        opt.textContent = r;
+        roleSel.appendChild(opt);
+      });
+    }
+
+    // html lang + remember choice
+    document.documentElement.lang = lang;
+    localStorage.setItem("renochain_lang", lang);
+
+    // toggle buttons
+    document.querySelectorAll(".lang").forEach(btn=>{
+      btn.classList.toggle("active", btn.dataset.lang === lang);
     });
   }
 
-  // html lang + remember choice
-  document.documentElement.lang = lang;
-  localStorage.setItem("renochain_lang", lang);
+  // init from saved pref or browser language, and wire up clicks
+  (function initLang(){
+    const saved = localStorage.getItem("renochain_lang");
+    const fallback = (navigator.language || "en").toLowerCase().startsWith("sv") ? "sv" : "en";
+    applyI18n(saved || fallback);
 
-  // toggle buttons
-  document.querySelectorAll(".lang").forEach(btn=>{
-    btn.classList.toggle("active", btn.dataset.lang === lang);
-  });
-}
+    document.addEventListener("click", (e)=>{
+      const btn = e.target.closest(".lang");
+      if(!btn) return;
+      applyI18n(btn.dataset.lang);
+    });
+  })();
 
-// init language once on load
-(function initLang(){
-  const saved = localStorage.getItem("renochain_lang");
-  const fallback = (navigator.language || "en").toLowerCase().startsWith("sv") ? "sv" : "en";
-  applyI18n(saved || fallback);
-})();
-
-// re-add language button clicks (outside applyI18n)
-document.addEventListener("click", (e)=>{
-  const btn = e.target.closest(".lang");
-  if(!btn) return;
-  applyI18n(btn.dataset.lang);
-});
-
-// ---------- Client hints: OS / device / browser / platform ----------
-function detectOS(ua) {
-  ua = ua || navigator.userAgent;
-  if (/Windows NT/i.test(ua)) return "Windows";
-  if (/Mac OS X/i.test(ua)) return "macOS";
-  if (/\biPhone|\biPad|\biPod/i.test(ua)) return "iOS";
-  if (/Android/i.test(ua)) return "Android";
-  if (/Linux/i.test(ua)) return "Linux";
-  return "Other";
-}
-function detectDeviceType(ua) {
-  ua = ua || navigator.userAgent;
-  if (/\b(iPad|Tablet)\b/i.test(ua)) return "Tablet";
-  if (/\b(Mobi|Android|iPhone|iPod)\b/i.test(ua)) return "Mobile";
-  return "Desktop";
-}
-function detectBrowser(ua) {
-  ua = ua || navigator.userAgent;
-  if (/Edg\//.test(ua)) return "Edge";
-  if (/OPR\//.test(ua) || /Opera/.test(ua)) return "Opera";
-  if (/Chrome\//.test(ua)) return "Chrome";
-  if (/Safari\//.test(ua) && !/Chrome\//.test(ua)) return "Safari";
-  if (/Firefox\//.test(ua)) return "Firefox";
-  return "Other";
-}
-
-// Fill OS/Device/Browser/Platform safely
-function setClientFields(){
-  const ua = navigator.userAgent || "";
-  const platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
-  const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ""; };
-
-  set("operating_system", detectOS(ua));
-  set("device_type",      detectDeviceType(ua));
-  set("browser",          detectBrowser(ua));
-  set("platform",         platform);
-}
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", setClientFields);
-} else {
-  setClientFields();
-}
-
-// ---------- IP-based geolocation (approximate) ----------
-(async function fillGeoByIP(){
-  try {
-    const resp = await fetch("https://ipapi.co/json/");
-    if (!resp.ok) return;
-    const d = await resp.json();
+  // ---------- Client hints: OS / device / browser / platform ----------
+  function detectOS(ua) {
+    ua = ua || navigator.userAgent;
+    if (/Windows NT/i.test(ua)) return "Windows";
+    if (/Mac OS X/i.test(ua)) return "macOS";
+    if (/\biPhone|\biPad|\biPod/i.test(ua)) return "iOS";
+    if (/Android/i.test(ua)) return "Android";
+    if (/Linux/i.test(ua)) return "Linux";
+    return "Other";
+  }
+  
+  function detectDeviceType(ua) {
+    ua = ua || navigator.userAgent;
+    if (/\b(iPad|Tablet)\b/i.test(ua)) return "Tablet";
+    if (/\b(Mobi|Android|iPhone|iPod)\b/i.test(ua)) return "Mobile";
+    return "Desktop";
+  }
+  
+  function detectBrowser(ua) {
+    ua = ua || navigator.userAgent;
+    // Order matters
+    if (/Edg\//.test(ua)) return "Edge";
+    if (/OPR\//.test(ua) || /Opera/.test(ua)) return "Opera";
+    if (/Chrome\//.test(ua)) return "Chrome";
+    if (/Safari\//.test(ua) && !/Chrome\//.test(ua)) return "Safari";
+    if (/Firefox\//.test(ua)) return "Firefox";
+    return "Other";
+  }
+  
+  (function fillClientFields(){
+    const ua = navigator.userAgent || "";
+    const platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
+  
     const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ""; };
+  
+    set("operating_system", detectOS(ua));
+    set("device_type",      detectDeviceType(ua));
+    set("browser",          detectBrowser(ua));
+    set("platform",         platform);
+  })();
 
-    set("continent", d.continent_code || "");
-    set("country",   d.country_name    || "");
-    set("region",    d.region          || "");
-    set("city",      d.city            || "");
-    set("ip",        d.ip              || "");
-  } catch(e) {
-    console.warn("Geo IP lookup failed", e);
-  }
-})();
+  // ---------- IP-based geolocation (approximate) ----------
+  (async function fillGeoByIP(){
+    try {
+      const resp = await fetch("https://ipapi.co/json/");
+      if (!resp.ok) return;
+      const d = await resp.json();
+      const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ""; };
+  
+      // ipapi fields: continent_code, country_name, region, city
+      set("continent", d.continent_code || "");
+      set("country",   d.country_name    || "");
+      set("region",    d.region          || "");
+      set("city",      d.city            || "");
+      set("ip",        d.ip              || "");
+      // if you later add timezone column, it's d.timezone
+    } catch(e) {
+      // silently ignore if blocked/offline
+      console.warn("Geo IP lookup failed", e);
+    }
+  })();
 
-// ========= CONFIG =========
-const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbzA0Xe1K2pbpH_ox1T-P7gKrwbSvGk4mh2mmWV74OtxaRkB_4Z8HVTj8zdKYeEVwbiwwg/exec";
-const VIDEO_URL   = "https://xqnnv.beeweb-orange.io/";
+  // ========= CONFIG: Replace with your values =========
+  const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbzA0Xe1K2pbpH_ox1T-P7gKrwbSvGk4mh2mmWV74OtxaRkB_4Z8HVTj8zdKYeEVwbiwwg/exec";
+  const VIDEO_URL   = "https://xqnnv.beeweb-orange.io/";
+  // ====================================================
 
-// Fill year
-document.getElementById('yr').textContent = new Date().getFullYear();
+  // Fill year
+  document.getElementById('yr').textContent = new Date().getFullYear();
 
-// Capture UTMs + context automatically
-const params = new URLSearchParams(location.search);
-const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ""; };
-["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].forEach(k => setVal(k, params.get(k)));
-setVal("referrer", document.referrer || "");
-setVal("landing_url", location.href);
-setVal("user_agent", navigator.userAgent || "");
+  // Capture UTMs + context automatically
+  const params = new URLSearchParams(location.search);
+  const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ""; };
+  ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].forEach(k => setVal(k, params.get(k)));
+  setVal("referrer", document.referrer || "");
+  setVal("landing_url", location.href);
+  setVal("user_agent", navigator.userAgent || "");
 
-// Validators
-const emailOk = v => /.+@.+\..+/.test(v);
-const phoneOk = v => !v || /^(\+\d{6,15}|\d{6,15}|\(\+?\d+\)[\d\s-]+)$/.test(v);
+  // Basic validators
+  const emailOk = v => /.+@.+\..+/.test(v);
+  const phoneOk = v => !v || /^(\+\d{6,15}|\d{6,15}|\(\+?\d+\)[\d\s-]+)$/.test(v);
 
-// Submit
-const form = document.getElementById("gateForm");
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const data = new FormData(form);
+  const form = document.getElementById("gateForm");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
 
-  // honeypot
-  if (data.get("website")) return;
+    // honeypot
+    if (data.get("website")) return;
 
-  const errs = {};
-  if (!(data.get("name")||"").trim()) errs.name = "Please enter your name.";
-  if (!emailOk(data.get("email")||"")) errs.email = "Enter a valid email.";
-  if (!(data.get("company")||"").trim()) errs.company = "Please enter your company.";
-  if (!phoneOk(data.get("phone")||"")) errs.phone = "Enter a valid phone, or leave blank.";
-  if (!form.consent.checked) errs.consent = "Consent is required.";
+    const errs = {};
+    if (!(data.get("name")||"").trim()) errs.name = "Please enter your name.";
+    if (!emailOk(data.get("email")||"")) errs.email = "Enter a valid email.";
+    if (!(data.get("company")||"").trim()) errs.company = "Please enter your company.";
+    if (!phoneOk(data.get("phone")||"")) errs.phone = "Enter a valid phone, or leave blank.";
+    if (!form.consent.checked) errs.consent = "Consent is required.";
 
-  // render errors
-  document.querySelectorAll(".err").forEach(el => el.style.display = "none");
-  Object.entries(errs).forEach(([k,msg])=>{
-    const el = document.querySelector(`.err[data-err="${k}"]`);
-    if (el){ el.textContent = msg; el.style.display = "block"; }
+    // render errors
+    document.querySelectorAll(".err").forEach(el => el.style.display = "none");
+    Object.entries(errs).forEach(([k,msg])=>{
+      const el = document.querySelector(`.err[data-err="${k}"]`);
+      if (el){ el.textContent = msg; el.style.display = "block"; }
+    });
+    if (Object.keys(errs).length) return;
+
+    try{
+      await fetch(ENDPOINT_URL, { method:"POST", mode:"no-cors", body:data });
+      document.getElementById("okMsg").style.display = "block";
+      setTimeout(()=>{ window.location.href = VIDEO_URL; }, 900);
+    }catch(err){
+      alert("Something went wrong submitting the form. Please try again.");
+      console.error(err);
+    }
   });
-  if (Object.keys(errs).length) return;
-
-  try{
-    console.table(Array.from(data.entries()));
-    await fetch(ENDPOINT_URL, { method:"POST", mode:"no-cors", body:data });
-    document.getElementById("okMsg").style.display = "block";
-    setTimeout(()=>{ window.location.href = VIDEO_URL; }, 900);
-  }catch(err){
-    alert("Something went wrong submitting the form. Please try again.");
-    console.error(err);
-  }
-});
 </script>
 </body>
 </html>
