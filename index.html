@@ -44,7 +44,11 @@
     .shell{max-width:1100px;margin:0 auto;padding:28px}
     header{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px}
     .brand{display:flex;align-items:center;gap:12px}
-    .brand img{height:44px;width:auto;border-radius:10px}
+    .brand img{
+      max-height:60px;   /* 15% bigger but responsive */
+      width:auto;
+      border-radius:10px;
+    }
     .brand h1{font-size:20px;margin:0}
     .tag{font-size:12px;color:var(--muted)}
 
@@ -146,7 +150,15 @@
     }
     .partners h3{font-size:12px;color:var(--muted);margin:0 0 10px;letter-spacing:.08em;text-transform:uppercase}
     .logos{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;align-items:center}
-    .logos img{width:100%;height:38px;object-fit:contain;background:#fff;border-radius:8px;padding:6px}
+    .logos img{
+      max-height:50px;   /* 15% bigger but shrinks on small screens */
+      width:auto;
+      object-fit:contain;
+      background:#fff;
+      border-radius:8px;
+      padding:6px;
+      margin:auto;       /* keep centered inside grid cell */
+    }
     @media (max-width: 780px){.logos{grid-template-columns:repeat(3,1fr)}}
     @media (max-width: 480px){.logos{grid-template-columns:repeat(2,1fr)}}
     footer{margin:24px 0 8px;text-align:center;color:var(--muted);font-size:12px}
