@@ -279,6 +279,7 @@
           <input type="hidden" name="referrer" id="referrer" />
           <input type="hidden" name="landing_url" id="landing_url" />
           <input type="hidden" name="user_agent" id="user_agent" />
+          <input type="hidden" name="ip" id="ip" />
           <!-- Hidden tech + geo fields -->
           <input type="hidden" name="operating_system" id="operating_system" />
           <input type="hidden" name="device_type" id="device_type" />
@@ -469,6 +470,7 @@
       set("country",   d.country_name    || "");
       set("region",    d.region          || "");
       set("city",      d.city            || "");
+      set("ip",        d.ip              || "");
       // if you later add timezone column, it's d.timezone
     } catch(e) {
       // silently ignore if blocked/offline
