@@ -308,7 +308,6 @@
       headline: "Unlock the full-length video",
       lede: "A deep dive into scalable, cost-efficient renovation — methods, partners, and lessons learned.",
       collab: "In collaboration with",
-
       "label-name": "Full name",
       "label-email": "Work email",
       "label-phone": "Phone",
@@ -318,22 +317,17 @@
       "role-placeholder": "Select your role",
       "consent-text": "I agree to the processing of my personal data for accessing this content and follow-up about related services.",
       "submit-btn": "Unlock & Watch",
-
-      // placeholders
       ph_name: "Jane Doe",
       ph_email: "jane@acme.se",
       ph_phone: "+46 70 123 45 67",
       ph_company: "Acme AB",
       ph_notes: "Optional",
-
-      // role options
       roles: ["CEO / Founder","Operations","Procurement","Project Manager","Engineer","Sales / Marketing","Other"]
     },
     sv: {
       headline: "Lås upp hela videon",
       lede: "En fördjupning i skalbar, kostnadseffektiv renovering — metoder, partners och lärdomar.",
       collab: "I samarbete med",
-
       "label-name": "Fullständigt namn",
       "label-email": "Arbetsmejl",
       "label-phone": "Telefon",
@@ -343,23 +337,17 @@
       "role-placeholder": "Välj din roll",
       "consent-text": "Jag samtycker till att mina personuppgifter behandlas för att få tillgång till detta innehåll och för uppföljning om relaterade tjänster.",
       "submit-btn": "Lås upp och titta",
-
-      // placeholders
       ph_name: "Anna Svensson",
       ph_email: "anna@acme.se",
       ph_phone: "+46 70 123 45 67",
       ph_company: "Acme AB",
       ph_notes: "Valfritt",
-
-      // role options
       roles: ["VD / Grundare","Drift","Inköp","Projektledare","Ingenjör","Sälj / Marknad","Annat"]
     }
   };
 
   function applyI18n(lang){
     const dict = i18n[lang] || i18n.en;
-
-    // static texts
     const ids = ["headline","lede","collab","label-name","label-email","label-phone","label-company","label-role","label-notes","consent-text","submit-btn","role-placeholder"];
     ids.forEach(id=>{
       const el = document.getElementById(id);
@@ -369,18 +357,15 @@
     });
 
     // placeholders
-    const nameEl = document.getElementById("name");
-    const emailEl = document.getElementById("email");
-    const phoneEl = document.getElementById("phone");
-    const companyEl = document.getElementById("company");
+    const setPh = (id, val) => { const el = document.getElementById(id); if (el) el.placeholder = val; };
+    setPh("name", dict.ph_name);
+    setPh("email", dict.ph_email);
+    setPh("phone", dict.ph_phone);
+    setPh("company", dict.ph_company);
     const notesEl = document.getElementById("notes");
-    if(nameEl) nameEl.placeholder = dict.ph_name;
-    if(emailEl) emailEl.placeholder = dict.ph_email;
-    if(phoneEl) phoneEl.placeholder = dict.ph_phone;
-    if(companyEl) companyEl.placeholder = dict.ph_company;
-    if(notesEl) notesEl.placeholder = dict.ph_notes;
+    if (notesEl) notesEl.placeholder = dict.ph_notes;
 
-    // role options
+    // roles
     const roleSel = document.getElementById("role");
     if(roleSel){
       const placeholder = roleSel.querySelector("option#role-placeholder");
@@ -393,17 +378,15 @@
       });
     }
 
-    // html lang + remember choice
     document.documentElement.lang = lang;
     localStorage.setItem("renochain_lang", lang);
 
-    // toggle buttons
     document.querySelectorAll(".lang").forEach(btn=>{
       btn.classList.toggle("active", btn.dataset.lang === lang);
     });
   }
 
-  // init from saved pref or browser language, and wire up clicks
+  // init language
   (function initLang(){
     const saved = localStorage.getItem("renochain_lang");
     const fallback = (navigator.language || "en").toLowerCase().startsWith("sv") ? "sv" : "en";
@@ -426,17 +409,14 @@
     if (/Linux/i.test(ua)) return "Linux";
     return "Other";
   }
-  
   function detectDeviceType(ua) {
     ua = ua || navigator.userAgent;
     if (/\b(iPad|Tablet)\b/i.test(ua)) return "Tablet";
     if (/\b(Mobi|Android|iPhone|iPod)\b/i.test(ua)) return "Mobile";
     return "Desktop";
   }
-  
   function detectBrowser(ua) {
     ua = ua || navigator.userAgent;
-    // Order matters
     if (/Edg\//.test(ua)) return "Edge";
     if (/OPR\//.test(ua) || /Opera/.test(ua)) return "Opera";
     if (/Chrome\//.test(ua)) return "Chrome";
@@ -444,36 +424,31 @@
     if (/Firefox\//.test(ua)) return "Firefox";
     return "Other";
   }
-  
-  (function fillClientFields(){
+
+  // Fill client hints on load (best effort)
+  (function fillClientFieldsOnLoad(){
     const ua = navigator.userAgent || "";
     const platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
-  
     const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ""; };
-  
     set("operating_system", detectOS(ua));
     set("device_type",      detectDeviceType(ua));
     set("browser",          detectBrowser(ua));
     set("platform",         platform);
   })();
 
-  // ---------- IP-based geolocation (approximate) ----------
-  (async function fillGeoByIP(){
+  // ---------- IP-based geolocation (awaitable) ----------
+  let geoReady = (async function fillGeoByIP(){
     try {
       const resp = await fetch("https://ipapi.co/json/");
       if (!resp.ok) return;
       const d = await resp.json();
       const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ""; };
-  
-      // ipapi fields: continent_code, country_name, region, city
       set("continent", d.continent_code || "");
       set("country",   d.country_name    || "");
       set("region",    d.region          || "");
       set("city",      d.city            || "");
       set("ip",        d.ip              || "");
-      // if you later add timezone column, it's d.timezone
     } catch(e) {
-      // silently ignore if blocked/offline
       console.warn("Geo IP lookup failed", e);
     }
   })();
@@ -483,10 +458,8 @@
   const VIDEO_URL   = "https://xqnnv.beeweb-orange.io/";
   // ====================================================
 
-  // Fill year
+  // Fill year and UTMs/context
   document.getElementById('yr').textContent = new Date().getFullYear();
-
-  // Capture UTMs + context automatically
   const params = new URLSearchParams(location.search);
   const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ""; };
   ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].forEach(k => setVal(k, params.get(k)));
@@ -501,11 +474,27 @@
   const form = document.getElementById("gateForm");
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+
+    // Ensure client hints are set *just in time* (covers very fast submits)
+    (function ensureClientFields(){
+      const ua = navigator.userAgent || "";
+      const platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
+      const setIfBlank = (id, val) => { const el = document.getElementById(id); if (el && !el.value) el.value = val || ""; };
+      setIfBlank("operating_system", detectOS(ua));
+      setIfBlank("device_type",      detectDeviceType(ua));
+      setIfBlank("browser",          detectBrowser(ua));
+      setIfBlank("platform",         platform);
+    })();
+
+    // Wait briefly for geo fields if still pending
+    try { await Promise.race([geoReady, new Promise(r=>setTimeout(r, 1200))]); } catch {}
+
     const data = new FormData(form);
 
-    // honeypot
+    // Honeypot
     if (data.get("website")) return;
 
+    // Validate
     const errs = {};
     if (!(data.get("name")||"").trim()) errs.name = "Please enter your name.";
     if (!emailOk(data.get("email")||"")) errs.email = "Enter a valid email.";
@@ -513,7 +502,6 @@
     if (!phoneOk(data.get("phone")||"")) errs.phone = "Enter a valid phone, or leave blank.";
     if (!form.consent.checked) errs.consent = "Consent is required.";
 
-    // render errors
     document.querySelectorAll(".err").forEach(el => el.style.display = "none");
     Object.entries(errs).forEach(([k,msg])=>{
       const el = document.querySelector(`.err[data-err="${k}"]`);
@@ -521,9 +509,11 @@
     });
     if (Object.keys(errs).length) return;
 
+    // Submit to Apps Script and redirect
     try{
       await fetch(ENDPOINT_URL, { method:"POST", mode:"no-cors", body:data });
-      document.getElementById("okMsg").style.display = "block";
+      const ok = document.getElementById("okMsg");
+      if (ok) ok.style.display = "block";
       setTimeout(()=>{ window.location.href = VIDEO_URL; }, 900);
     }catch(err){
       alert("Something went wrong submitting the form. Please try again.");
