@@ -9,6 +9,9 @@
   <!-- Fonts (optional) -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- Video -->
+  <link rel="preconnect" href="https://player.vimeo.com" crossorigin>
+  <link rel="preconnect" href="https://i.vimeocdn.com" crossorigin>
 
   <style>
     :root{
@@ -74,10 +77,26 @@
     .headline{font-size:34px;line-height:1.1;margin:10px 0 8px}
     .lede{color:var(--muted);margin:0 0 16px}
     .video{
-      aspect-ratio:16/9;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.12);
+      aspect-ratio:16/9;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.12);
       border: 1px solid rgba(0,0,0,.08);
-      background: #f2f4f3;
+/*       background: #f2f4f3; */
+      background:#000;                  /* looks better behind a video */
     }
+    /* Responsive Vimeo wrapper */
+    .video .vimeo-embed{
+      position:relative;
+      width:100%;
+      padding-top:56.25%; /* 16:9 */
+    }
+    .video .vimeo-embed iframe{
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      border:0;
+    }
+    
     .video img, .video video{width:100%;height:100%;object-fit:cover;display:block}
 
     .form-card{
@@ -200,18 +219,48 @@
     }
 
     /* --- success tick + message --- */
-    .success-wrap{
-      display:none;            /* shown after submit */
-      align-items:center;
+/*     .success-wrap{
+      display:none;            /* shown after submit */ */
+/*       align-items:center;
       justify-content:center;
       gap:12px;
       margin-top:12px;
       padding:16px;
       border:1px solid rgba(0,0,0,.10);
       background:#fff;
-      border-radius:12px;
-      box-shadow:0 6px 24px rgba(0,0,0,.06);
+      border-radius:12px; */
+/*       box-shadow:0 6px 24px rgba(0,0,0,.06); */
+/*     } */
+
+    .success-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 14px 16px;
+      margin-top: 14px;
+      border-radius: 10px;
+      background: #f0fdf4; /* light green background */
+      border: 1px solid #bbf7d0; /* soft green border */
     }
+    
+    .success-texts {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    #successText {
+      font-weight: 600;
+      color: #065f46; /* dark green */
+      font-size: 15px;
+    }
+    
+    #successHint {
+      font-size: 13px;
+      color: #374151; /* muted dark gray */
+      opacity: 0.9;
+    }
+
     
     .checkmark{
       width:42px;height:42px;border-radius:50%;
@@ -302,11 +351,23 @@
         <div class="headline" id="headline">Unlock the full-length video</div>
         <p class="lede" id="lede">A deep dive into scalable, cost-efficient renovation — methods, partners, and lessons learned.</p>
         
-        <div class="video" aria-label="Teaser image">
-          <!-- 🔁 Replace with your own cover image or short muted video -->
-          <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1400&auto=format&fit=crop" alt="RenoChain video teaser" />
+        <div class="video" aria-label="Teaser video">
+          <div class="vimeo-embed">
+            <iframe
+              src="https://player.vimeo.com/video/1120087399?h=ec76700423&badge=0&autopause=1&muted=1&playsinline=1"
+              title="RenoChain - teaser video"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              loading="lazy"
+              frameborder="0"
+              allowfullscreen
+            ></iframe>
+          </div>
         </div>
 
+        <!-- Vimeo API (optional, only needed if you’ll control play/pause via JS later) -->
+<!--         <script defer src="https://player.vimeo.com/api/player.js"></script> -->
+        
         <!-- Partners -->
         <div class="partners">
           <h3 id="collab">In collaboration with</h3>
@@ -392,7 +453,7 @@
           <input type="hidden" name="city" id="city" />
           
           <button class="btn" type="submit" id="submit-btn">Unlock & Watch</button>
-          <div id="success" class="success-wrap" role="status" aria-live="polite">
+<!--           <div id="success" class="success-wrap" role="status" aria-live="polite">
           <span class="checkbox" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="24" height="24">
             <rect x="2" y="2" width="20" height="20" rx="5" ry="5"
@@ -402,7 +463,20 @@
           </span>
           <p id="success-text" style="margin:0;font-weight:600"></p>
           <p id="success-hint" style="margin:4px 0 0;font-size:13px;color:#555"></p>
+          </div> -->
+          <div id="success" class="success-wrap" style="display:none;">
+          <span class="checkbox" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" class="box"/>
+              <polyline points="6,12 10,16 18,8" class="tick"/>
+            </svg>
+          </span>
+          <div class="success-texts">
+            <div id="successText"></div>
+            <div id="successHint"></div>
           </div>
+        </div>
+
         </form>
       </div>
     </section>
