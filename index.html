@@ -364,6 +364,7 @@
           <div id="success" class="success-wrap" role="status" aria-live="polite">
           <span class="checkmark" aria-hidden="true"></span>
           <p id="success-text" style="margin:0;font-weight:600"></p>
+          <p id="success-hint" style="margin:4px 0 0;font-size:13px;color:#555"></p>
           </div>
         </form>
       </div>
@@ -398,7 +399,8 @@
       ph_company: "Acme AB",
       ph_notes: "Optional",
       roles: ["CEO / Founder","Operations","Procurement","Project Manager","Engineer","Sales / Marketing","Other"],
-      success_msg: "Thank you {NAME}!. Please check your inbox for the video link."
+      success_msg: "Thank you {NAME}!. Please check your inbox for the video link.",
+      success_hint: "If you don’t see the email soon, please also check your spam or junk folder."
     },
     sv: {
       headline: "Lås upp hela videon",
@@ -421,7 +423,8 @@
       ph_company: "Acme AB",
       ph_notes: "Valfritt",
       roles: ["VD / Grundare","Drift","Inköp","Projektledare","Ingenjör","Sälj / Marknad","Annat"],
-      success_msg: "Tack {NAME}!. Kontrollera din inkorg för videolänken."
+      success_msg: "Tack {NAME}!. Kontrollera din inkorg för videolänken.",
+      success_hint: "Om du inte ser e-postmeddelandet snart, titta även i din skräppostmapp."
     }
   };
 
@@ -618,7 +621,9 @@
       // Show tick + message
       const success = document.getElementById("success");
       const successText = document.getElementById("success-text");
+      const successHint = document.getElementById("success-hint");
       if (successText) successText.textContent = msg;
+      if (successHint) successHint.textContent = dict.success_hint || "";
       if (success) {
         success.style.display = "flex";
         success.scrollIntoView({ behavior: "smooth", block: "center" });
