@@ -294,6 +294,27 @@
     .success-wrap.show .checkbox .box {stroke: var(--accent2);}
     .success-wrap.show .checkbox .tick {stroke-dashoffset: 0;}
 
+    /* Overlay endcard styling */
+    .endcard{
+      position:absolute;
+      inset:0;
+      display:none;            /* hidden by default */
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,.75);
+      color:#fff;
+      z-index:2;
+      border-radius:16px;      /* match video corners */
+    }
+    .endcard-inner{ text-align:center; }
+    .endcard-title{ font-size:20px; font-weight:700; margin-bottom:12px; }
+    .replay-btn{
+      background:#6cc24a; color:#fff; border:none; border-radius:8px;
+      padding:10px 16px; cursor:pointer; font-weight:600; font-size:14px;
+      transition:background .2s ease;
+    }
+    .replay-btn:hover{ background:#5aad3f; }
+    
     /* When the overlay is showing, dim + slightly blur the Vimeo iframe behind it */
     .video.dim .vimeo-embed iframe{
       filter: brightness(0.35) blur(2px);
@@ -341,7 +362,7 @@
         <div class="video" id="teaserBox" aria-label="Teaser video">
         <div class="vimeo-embed">
           <iframe
-            id="teaserFrame"
+            id="teaserVideo"
             src="https://player.vimeo.com/video/1120087399?h=ec76700423&badge=0&autopause=1&muted=1&playsinline=1"
             title="RenoChain - teaser video"
             allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
@@ -652,26 +673,6 @@
 
   const form = document.getElementById("gateForm");
 
-  // --- Vimeo overlay handling ---
-  const iframe = document.getElementById("teaser-video");
-  const player = new Vimeo.Player(iframe);
-  const endcard = document.getElementById("endcard");
-  const replayBtn = document.getElementById("replayBtn");
-  const teaserBox= document.getElementById("teaserBox");
-  
-  // Show overlay when video ends
-  player.on("ended", () => {
-    teaserBox.classList.add("dim");   // apply blur/dim
-    endcard.style.display = "flex";  // reveal grey overlay with button
-  });
-  
-  // Hide overlay + replay when clicked
-  replayBtn.addEventListener("click", () => {
-    endcard.style.display = "none";
-    teaserBox.classList.remove("dim"); // remove blur/dim
-    player.setCurrentTime(0).then(() => player.play());  // restart video
-  });
-
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -753,28 +754,34 @@
 
   // ===== Vimeo endcard control =====
   (function setupEndcard(){
-    const iframe = document.querySelector('.vimeo-embed iframe');
-    if (!iframe) return;
+    // Grab elements by the IDs we agreed on
+    const iframe    = document.getElementById('teaserVideo');   // <-- match your HTML
+    const overlay   = document.getElementById('endcard');
+    const replayBtn = document.getElementById('replayBtn');
+    const teaserBox = document.getElementById('teaserBox');
   
-    // If the API script hasn't finished yet, wait for window load.
+    if (!iframe || !overlay || !replayBtn || !teaserBox) return;
+  
     const init = () => {
       if (!window.Vimeo || !window.Vimeo.Player) return;
       const player = new Vimeo.Player(iframe);
   
-      const overlay = document.querySelector('.video .endcard');
-      const replayBtn = overlay ? overlay.querySelector('.replay-btn') : null;
-      if (!overlay) return;
+      const show = () => { 
+        teaserBox.classList.add('dim'); 
+        overlay.style.display = 'flex'; 
+      };
+      const hide = () => { 
+        overlay.style.display = 'none'; 
+        teaserBox.classList.remove('dim'); 
+      };
   
-      const show = () => { overlay.style.display = 'flex'; };
-      const hide = () => { overlay.style.display = 'none'; };
-  
-      // Hide overlay when the user plays/seeks; show it when the video ends.
+      // Show the overlay when video ends; hide when playing/seeked
+      player.on('ended', show);
       player.on('play', hide);
       player.on('seeked', hide);
-      player.on('ended', show);
   
-      // Replay button resets to 0 and plays again
-      replayBtn && replayBtn.addEventListener('click', async () => {
+      // Replay button: hide overlay, rewind, play
+      replayBtn.addEventListener('click', async () => {
         hide();
         try {
           await player.setCurrentTime(0);
@@ -783,12 +790,14 @@
       });
     };
   
+    // Player.js is loaded with "defer". If it's not ready, run after window load.
     if (document.readyState === 'complete') {
       init();
     } else {
       window.addEventListener('load', init, { once: true });
     }
   })();
+
 </script>
 </body>
 </html>
