@@ -139,8 +139,23 @@
     .btn:hover{transform:translateY(-1px)}
     .btn:active{transform:translateY(0)}
 
-    .consent{display:flex;align-items:flex-start;gap:10px;margin-top:8px}
-    .consent input{width:auto;margin-top:3px}
+    .consent{
+      display:flex;
+      align-items:center;   /* vertically center checkbox with first line of text */
+      gap:12px;
+      margin-top:10px;
+    }
+    
+    .consent input{
+      width:auto;
+      margin:0;             /* remove default offset */
+      transform: translateY(1px);  /* tiny nudge so it sits on the text baseline */
+    }
+    
+    .consent label{
+      line-height:1.35;     /* comfortable multi-line spacing */
+    }
+    
     .err{color:var(--err);font-size:12px;display:none}
     .ok{color:var(--ok);font-size:13px;display:none;margin-top:8px}
 
@@ -151,18 +166,20 @@
     .partners h3{font-size:12px;color:var(--muted);margin:0 0 10px;letter-spacing:.08em;text-transform:uppercase}
     .logos{
       display:grid;
-      grid-template-columns:repeat(5,minmax(0,1fr));
-      gap:18px;              /* increased from 12px → 18px */
-      align-items:center;
+      grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
+      gap:24px;                      /* even spacing between logos */
+      place-items:center;            /* center inside each cell */
+      padding-top:8px;
     }
     .logos img{
-      max-height:72px;   /* 15% bigger but shrinks on small screens */
-      width:auto;
+      height:56px;                   /* uniform visual size */
+      max-width:160px;               /* prevents super-wide logos from stretching */
+      width:100%;
       object-fit:contain;
       background:#fff;
       border-radius:8px;
-      padding:8px;
-      margin:auto;       /* keep centered inside grid cell */
+      padding:10px;                  /* consistent white border around all logos */
+      box-shadow:0 0 0 1px rgba(0,0,0,.06) inset; /* subtle edge so it doesn’t “stick” to the card */
     }
     @media (max-width: 780px){.logos{grid-template-columns:repeat(3,1fr)}}
     @media (max-width: 480px){.logos{grid-template-columns:repeat(2,1fr)}}
@@ -227,7 +244,7 @@
             <img src="WFT.png" alt="Partner WFT" />
             <img src="STC.png" alt="Partner STC" />
             <img src="SABO.jpg" alt="Partner SABO" />
-            <img src="SEA.png" alt="Partner SEA" />
+            <img src="SWEA.png" alt="Partner SEA" />
           </div>
         </div>
       </div>
