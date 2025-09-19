@@ -96,7 +96,6 @@
       outline:none;
     }
 
-
     /* light-themed dropdown (closed + opened list) */
     select{
       appearance:none;
@@ -238,7 +237,39 @@
     @keyframes cm-draw{
       to{opacity:1}
     }
+
+    /* Checkbox animation */
+    .checkbox {
+      display:inline-block;
+      margin-right:10px;
+    }
+    .checkbox svg {
+      stroke: var(--accent2);
+      stroke-width: 3;
+      fill: none;
+    }
+    .checkbox .box {
+      stroke: #ccc;
+      stroke-width: 2;
+      fill: white;
+      transition: stroke 0.3s ease;
+    }
+    .checkbox .tick {
+      stroke-dasharray: 30;
+      stroke-dashoffset: 30;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke-dashoffset 0.4s ease;
+    }
     
+    /* Animate when parent .success-wrap is visible */
+    .success-wrap.show .checkbox .box {
+      stroke: var(--accent2);
+    }
+    .success-wrap.show .checkbox .tick {
+      stroke-dashoffset: 0;
+    }
+
   </style>
 </head>
 <body>
@@ -362,7 +393,13 @@
           
           <button class="btn" type="submit" id="submit-btn">Unlock & Watch</button>
           <div id="success" class="success-wrap" role="status" aria-live="polite">
-          <span class="checkmark" aria-hidden="true"></span>
+          <span class="checkbox" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="24" height="24">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"
+                  class="box"/>
+            <polyline points="6,12 10,16 18,8" class="tick"/>
+          </svg>
+          </span>
           <p id="success-text" style="margin:0;font-weight:600"></p>
           <p id="success-hint" style="margin:4px 0 0;font-size:13px;color:#555"></p>
           </div>
@@ -626,6 +663,7 @@
       if (successHint) successHint.textContent = dict.success_hint || "";
       if (success) {
         success.style.display = "flex";
+        success.classList.add("show");   // ✅ trigger animation
         success.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     
