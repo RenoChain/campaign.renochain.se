@@ -219,21 +219,8 @@
     }
 
     /* --- success tick + message --- */
-/*     .success-wrap{
-      display:none;            /* shown after submit */ */
-/*       align-items:center;
-      justify-content:center;
-      gap:12px;
-      margin-top:12px;
-      padding:16px;
-      border:1px solid rgba(0,0,0,.10);
-      background:#fff;
-      border-radius:12px; */
-/*       box-shadow:0 6px 24px rgba(0,0,0,.06); */
-/*     } */
-
     .success-wrap {
-      display: flex;
+      display: none;
       align-items: flex-start;
       gap: 10px;
       padding: 14px 16px;
@@ -242,6 +229,9 @@
       background: #f0fdf4; /* light green background */
       border: 1px solid #bbf7d0; /* soft green border */
     }
+
+    /* When we add .show in JS, it becomes visible and animates the checkbox */
+    .success-wrap.show{ display:flex; }
     
     .success-texts {
       display: flex;
@@ -288,21 +278,9 @@
     }
 
     /* Checkbox animation */
-    .checkbox {
-      display:inline-block;
-      margin-right:10px;
-    }
-    .checkbox svg {
-      stroke: var(--accent2);
-      stroke-width: 3;
-      fill: none;
-    }
-    .checkbox .box {
-      stroke: #ccc;
-      stroke-width: 2;
-      fill: white;
-      transition: stroke 0.3s ease;
-    }
+    .checkbox {display:inline-block;margin-right:10px;}
+    .checkbox svg {stroke: var(--accent2);stroke-width: 3;fill: none;}
+    .checkbox .box {stroke: #ccc;stroke-width: 2;fill: white;transition: stroke 0.3s ease;}
     .checkbox .tick {
       stroke-dasharray: 30;
       stroke-dashoffset: 30;
@@ -312,12 +290,8 @@
     }
     
     /* Animate when parent .success-wrap is visible */
-    .success-wrap.show .checkbox .box {
-      stroke: var(--accent2);
-    }
-    .success-wrap.show .checkbox .tick {
-      stroke-dashoffset: 0;
-    }
+    .success-wrap.show .checkbox .box {stroke: var(--accent2);}
+    .success-wrap.show .checkbox .tick {stroke-dashoffset: 0;}
 
   </style>
 </head>
@@ -453,18 +427,7 @@
           <input type="hidden" name="city" id="city" />
           
           <button class="btn" type="submit" id="submit-btn">Unlock & Watch</button>
-<!--           <div id="success" class="success-wrap" role="status" aria-live="polite">
-          <span class="checkbox" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="24" height="24">
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"
-                  class="box"/>
-            <polyline points="6,12 10,16 18,8" class="tick"/>
-          </svg>
-          </span>
-          <p id="success-text" style="margin:0;font-weight:600"></p>
-          <p id="success-hint" style="margin:4px 0 0;font-size:13px;color:#555"></p>
-          </div> -->
-          <div id="success" class="success-wrap" style="display:none;">
+          <div id="success" class="success-wrap" role="status" aria-live="polite" style="display:none;">
           <span class="checkbox" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="24" height="24">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5" class="box"/>
@@ -569,12 +532,6 @@
         opt.textContent = r;
         roleSel.appendChild(opt);
       });
-    }
-
-    const sm = document.getElementById("success-text");
-    if (sm){
-      const dict = i18n[lang] || i18n.en;
-      sm.textContent = (dict.success_msg || "").replace("{NAME}","");
     }
 
     document.documentElement.lang = lang;
@@ -731,10 +688,10 @@
     
       // Show tick + message
       const success = document.getElementById("success");
-      const successText = document.getElementById("success-text");
-      const successHint = document.getElementById("success-hint");
-      if (successText) successText.textContent = msg;
-      if (successHint) successHint.textContent = dict.success_hint || "";
+      const successTextEl = document.getElementById("successText");
+      const successHintEl = document.getElementById("successHint");
+      if (successTextEl) successTextEl.textContent = msg;
+      if (successHintEl) successHintEl.textContent = dict.success_hint || "";
       if (success) {
         success.style.display = "flex";
         success.classList.add("show");   // ✅ trigger animation
