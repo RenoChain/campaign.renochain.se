@@ -187,18 +187,57 @@
     a{color:#d2e4ff}
     
     /* language switcher */
-  .lang-switch{display:flex;gap:8px}
-  .lang{padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.2);
-    background:rgba(255,255,255,.05);color:var(--text);cursor:pointer;font-weight:700}
-  .lang.active{background:linear-gradient(135deg,var(--accent2),var(--accent1));color:#07120a;border-color:transparent}
+    .lang-switch{display:flex;gap:8px}
+    .lang{padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.2);
+      background:rgba(255,255,255,.05);color:var(--text);cursor:pointer;font-weight:700}
+    .lang.active{background:linear-gradient(135deg,var(--accent2),var(--accent1));color:#07120a;border-color:transparent}
+      
+      /* automatically add a red * after required labels */
+    label[for="name"]::after,
+    label[for="email"]::after {
+      content: " *";
+      color: #b91c1c;   /* red */
+      font-weight: 700;
+    }
+
+    /* --- success tick + message --- */
+    .success-wrap{
+      display:none;            /* shown after submit */
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      margin-top:12px;
+      padding:16px;
+      border:1px solid rgba(0,0,0,.10);
+      background:#fff;
+      border-radius:12px;
+      box-shadow:0 6px 24px rgba(0,0,0,.06);
+    }
     
-    /* automatically add a red * after required labels */
-  label[for="name"]::after,
-  label[for="email"]::after {
-    content: " *";
-    color: #b91c1c;   /* red */
-    font-weight: 700;
-  }
+    .checkmark{
+      width:42px;height:42px;border-radius:50%;
+      border:3px solid #22c55e;       /* green ring */
+      position:relative; display:inline-block;
+      animation:cm-pop .35s ease-out;
+    }
+    .checkmark::after{
+      content:"";
+      position:absolute; left:10px; top:14px;
+      width:10px; height:18px;
+      border-right:3px solid #22c55e;
+      border-bottom:3px solid #22c55e;
+      transform:rotate(45deg);
+      opacity:0;
+      animation:cm-draw .45s ease-out .15s forwards;
+    }
+    
+    @keyframes cm-pop{
+      0%{transform:scale(.7);opacity:0}
+      100%{transform:scale(1);opacity:1}
+    }
+    @keyframes cm-draw{
+      to{opacity:1}
+    }
     
   </style>
 </head>
@@ -322,7 +361,10 @@
           <input type="hidden" name="city" id="city" />
           
           <button class="btn" type="submit" id="submit-btn">Unlock & Watch</button>
-          <div class="ok" id="okMsg">Thanks! Redirecting…</div>
+          <div id="success" class="success-wrap" role="status" aria-live="polite">
+          <span class="checkmark" aria-hidden="true"></span>
+          <p id="success-text" style="margin:0;font-weight:600"></p>
+          </div>
         </form>
       </div>
     </section>
@@ -355,7 +397,8 @@
       ph_phone: "+46 70 123 45 67",
       ph_company: "Acme AB",
       ph_notes: "Optional",
-      roles: ["CEO / Founder","Operations","Procurement","Project Manager","Engineer","Sales / Marketing","Other"]
+      roles: ["CEO / Founder","Operations","Procurement","Project Manager","Engineer","Sales / Marketing","Other"],
+      success_msg: "Thank you {NAME}!. Please check your inbox for the video link."
     },
     sv: {
       headline: "Lås upp hela videon",
@@ -377,7 +420,8 @@
       ph_phone: "+46 70 123 45 67",
       ph_company: "Acme AB",
       ph_notes: "Valfritt",
-      roles: ["VD / Grundare","Drift","Inköp","Projektledare","Ingenjör","Sälj / Marknad","Annat"]
+      roles: ["VD / Grundare","Drift","Inköp","Projektledare","Ingenjör","Sälj / Marknad","Annat"],
+      success_msg: "Tack {NAME}!. Kontrollera din inkorg för videolänken."
     }
   };
 
@@ -411,6 +455,12 @@
         opt.textContent = r;
         roleSel.appendChild(opt);
       });
+    }
+
+    const sm = document.getElementById("success-text");
+    if (sm){
+      const dict = i18n[lang] || i18n.en;
+      sm.textContent = (dict.success_msg || "").replace("{NAME}","");
     }
 
     document.documentElement.lang = lang;
@@ -544,14 +594,41 @@
     });
     if (Object.keys(errs).length) return;
 
-    // Submit to Apps Script and redirect
+    // Submit to Apps Script and show success (no redirect)
     try{
       await fetch(ENDPOINT_URL, { method:"POST", mode:"no-cors", body:data });
-      const ok = document.getElementById("okMsg");
-      if (ok) ok.style.display = "block";
-      setTimeout(()=>{ window.location.href = VIDEO_URL; }, 900);
+    
+      // Determine current language
+      const saved = localStorage.getItem("renochain_lang");
+      const fallback = (navigator.language || "en").toLowerCase().startsWith("sv") ? "sv" : "en";
+      const lang = saved || fallback;
+      const dict = i18n[lang] || i18n.en;
+    
+      // Personalize with name if present
+      const rawName = (data.get("name") || "").trim();
+      const namePart = rawName ? `, ${rawName}` : "";
+      const msg = (dict.success_msg || "Thank you. Please check your inbox for the video link.")
+                   .replace("{NAME}", namePart);
+    
+      // Disable inputs to prevent double submits
+      const btn = document.getElementById("submit-btn");
+      if (btn) { btn.disabled = true; btn.style.opacity = .7; btn.style.cursor = "default"; }
+      form.querySelectorAll("input, select, textarea").forEach(el => el.disabled = true);
+    
+      // Show tick + message
+      const success = document.getElementById("success");
+      const successText = document.getElementById("success-text");
+      if (successText) successText.textContent = msg;
+      if (success) {
+        success.style.display = "flex";
+        success.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    
+      // No redirect; Mailchimp will send the email with the video link.
     }catch(err){
-      alert("Something went wrong submitting the form. Please try again.");
+      alert(lang === "sv"
+        ? "Något gick fel när formuläret skickades. Försök igen."
+        : "Something went wrong submitting the form. Please try again.");
       console.error(err);
     }
   });
