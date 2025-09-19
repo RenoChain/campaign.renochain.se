@@ -294,6 +294,17 @@
     .success-wrap.show .checkbox .box {stroke: var(--accent2);}
     .success-wrap.show .checkbox .tick {stroke-dashoffset: 0;}
 
+    /* When the overlay is showing, dim + slightly blur the Vimeo iframe behind it */
+    .video.dim .vimeo-embed iframe{
+      filter: brightness(0.35) blur(2px);
+      transition: filter .25s ease;
+      pointer-events: none; /* avoid clicks on the iframe while overlay is up */
+    }
+    
+    /* Ensure the overlay only shows when we add the .dim state */
+    .video .endcard{ display:none; }
+    .video.dim .endcard{ display:flex; }
+
   </style>
   
 </head>
@@ -327,7 +338,7 @@
         <div class="headline" id="headline">Unlock the full-length video</div>
         <p class="lede" id="lede">A deep dive into scalable, cost-efficient renovation — methods, partners, and lessons learned.</p>
         
-        <div class="video" aria-label="Teaser video">
+        <div class="video" id="teaserBox" aria-label="Teaser video">
         <div class="vimeo-embed">
           <iframe
             id="teaserFrame"
@@ -646,15 +657,18 @@
   const player = new Vimeo.Player(iframe);
   const endcard = document.getElementById("endcard");
   const replayBtn = document.getElementById("replayBtn");
+  const teaserBox= document.getElementById("teaserBox");
   
   // Show overlay when video ends
   player.on("ended", () => {
+    teaserBox.classList.add("dim");   // apply blur/dim
     endcard.style.display = "flex";  // reveal grey overlay with button
   });
   
   // Hide overlay + replay when clicked
   replayBtn.addEventListener("click", () => {
     endcard.style.display = "none";
+    teaserBox.classList.remove("dim"); // remove blur/dim
     player.setCurrentTime(0).then(() => player.play());  // restart video
   });
 
