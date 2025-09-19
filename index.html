@@ -190,7 +190,7 @@
       padding-top:8px;
     }
     .logos img{
-      height:56px;                   /* uniform visual size */
+      height:72px;                   /* uniform visual size */
       max-width:160px;               /* prevents super-wide logos from stretching */
       width:100%;
       object-fit:contain;
@@ -493,7 +493,7 @@
       headline: "Unlock the full-length video",
       page_title: "Industrialized Energy Renovation — Video Showcase",
       site_subtitle: "Industrialized Energy Renovation — Video Showcase",
-      lede: "A deep dive into scalable, cost-efficient renovation — methods, partners, and lessons learned.",
+      lede: "Discover the industrialized energy renovation of the future – faster, cheaper, and more sustainable with RenoChain's digital process.",
       collab: "In collaboration with",
       "label-name": "Full name",
       "label-email": "Work email",
@@ -517,7 +517,7 @@
       headline: "Lås upp hela videon",
       page_title: "Industrialisierad energirenovering — Video Showcase",
       site_subtitle: "Industrialisierad energirenovering — Video Showcase",
-      lede: "En fördjupning i skalbar, kostnadseffektiv renovering — metoder, partners och lärdomar.",
+      lede: "Upptäck framtidens industrialiserade energirenovering – snabbare, billigare och hållbarare med RenoChains digitala process.",
       collab: "I samarbete med",
       "label-name": "Fullständigt namn",
       "label-email": "Arbetsmejl",
@@ -541,7 +541,7 @@
 
   function applyI18n(lang){
     const dict = i18n[lang] || i18n.en;
-    const ids = ["headline","lede","collab","label-name","label-email","label-phone","label-company","label-role","label-notes","consent-text","submit-btn","role-placeholder", "site-subtitle", "page-title"];
+    const ids = ["headline","lede","collab","label-name","label-email","label-phone","label-company","label-role","label-notes","consent-text","submit-btn","role-placeholder", "site-subtitle", "page_title"];
     ids.forEach(id=>{
       const el = document.getElementById(id);
       if(!el) return;
