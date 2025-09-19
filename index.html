@@ -156,12 +156,12 @@
       align-items:center;
     }
     .logos img{
-      max-height:50px;   /* 15% bigger but shrinks on small screens */
+      max-height:72px;   /* 15% bigger but shrinks on small screens */
       width:auto;
       object-fit:contain;
       background:#fff;
       border-radius:8px;
-      padding:6px;
+      padding:8px;
       margin:auto;       /* keep centered inside grid cell */
     }
     @media (max-width: 780px){.logos{grid-template-columns:repeat(3,1fr)}}
@@ -174,6 +174,15 @@
   .lang{padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.2);
     background:rgba(255,255,255,.05);color:var(--text);cursor:pointer;font-weight:700}
   .lang.active{background:linear-gradient(135deg,var(--accent2),var(--accent1));color:#07120a;border-color:transparent}
+    
+    /* automatically add a red * after required labels */
+  label[for="name"]::after,
+  label[for="email"]::after {
+    content: " *";
+    color: #b91c1c;   /* red */
+    font-weight: 700;
+  }
+    
   </style>
 </head>
 <body>
@@ -185,7 +194,7 @@
         <img src="RenoChain_Logo_500X.png" alt="RenoChain logo" />
         <div>
           <h1 class="tag" style="margin:0; font-weight:800; letter-spacing:.05em;">RenoChain</h1>
-          <div class="tag">Million Program Renovation — Video Showcase</div>
+          <div class="tag" id="site-subtitle">Million Program Renovation — Video Showcase</div>
         </div>
       </div>
       <!-- EN/SV language switcher -->
@@ -194,6 +203,11 @@
         <button type="button" data-lang="sv" class="lang">SV</button>
       </div>
     </header>
+
+        <!-- Main Title -->
+    <h2 id="page-title" style="text-align:center; margin:0 0 12px; font-weight:800;">
+      Industrialized Energy Renovation — Video Showcase
+    </h2>
 
     <!-- Hero & Form -->
     <section class="hero">
@@ -306,6 +320,8 @@
   const i18n = {
     en: {
       headline: "Unlock the full-length video",
+      page_title: "Industrialized Energy Renovation — Video Showcase",
+      site_subtitle: "Industrialized Energy Renovation — Video Showcase",
       lede: "A deep dive into scalable, cost-efficient renovation — methods, partners, and lessons learned.",
       collab: "In collaboration with",
       "label-name": "Full name",
@@ -326,6 +342,8 @@
     },
     sv: {
       headline: "Lås upp hela videon",
+      page_title: "Industrialisierad energirenovering — Video Showcase",
+      site_subtitle: "Industrialisierad energirenovering — Video Showcase",
       lede: "En fördjupning i skalbar, kostnadseffektiv renovering — metoder, partners och lärdomar.",
       collab: "I samarbete med",
       "label-name": "Fullständigt namn",
@@ -348,7 +366,7 @@
 
   function applyI18n(lang){
     const dict = i18n[lang] || i18n.en;
-    const ids = ["headline","lede","collab","label-name","label-email","label-phone","label-company","label-role","label-notes","consent-text","submit-btn","role-placeholder"];
+    const ids = ["headline","lede","collab","label-name","label-email","label-phone","label-company","label-role","label-notes","consent-text","submit-btn","role-placeholder", "site-subtitle", "page-title"];
     ids.forEach(id=>{
       const el = document.getElementById(id);
       if(!el) return;
