@@ -82,8 +82,9 @@
       overflow:hidden;
       border:1px solid rgba(255,255,255,.12);
       border: 1px solid rgba(0,0,0,.08);
-/*       background: #f2f4f3; */
-      background:#000;                  /* looks better behind a video */
+    /*background: #f2f4f3; */
+      background:#000;     /* looks better behind a video */
+      position: relative; /* <--  this line */
     }
     /* Responsive Vimeo wrapper */
     .video .vimeo-embed{
@@ -217,44 +218,6 @@
       color: #b91c1c;   /* red */
       font-weight: 700;
     }
-
-    /* Overlay endcard styling */
-    .endcard {
-      position: absolute;
-      inset: 0;
-      display: none; /* hidden by default */
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.75);
-      color: #fff;
-      z-index: 2;
-      border-radius: 16px; /* match video corners */
-    }
-    
-    .endcard-inner {
-      text-align: center;
-    }
-    
-    .endcard-title {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-    
-    .replay-btn {
-      background: #6cc24a;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 16px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-      transition: background 0.2s ease;
-    }
-    .replay-btn:hover {
-      background: #5aad3f;
-    }
     
     /* --- success tick + message --- */
     .success-wrap {
@@ -365,27 +328,28 @@
         <p class="lede" id="lede">A deep dive into scalable, cost-efficient renovation — methods, partners, and lessons learned.</p>
         
         <div class="video" aria-label="Teaser video">
-          <div class="vimeo-embed">
-            <iframe
-              src="https://player.vimeo.com/video/1120087399?h=ec76700423&badge=0&autopause=1&muted=1&playsinline=1&title=0&byline=0&portrait=0&dnt=1"
-              title="RenoChain - teaser video"
-              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-              referrerpolicy="strict-origin-when-cross-origin"
-              loading="lazy"
-              frameborder="0"
-              allowfullscreen
-            ></iframe>
-          </div>
-          <!-- ✅ New overlay goes here -->
-          <div class="endcard" aria-hidden="true">
-            <div class="endcard-inner">
-              <div class="endcard-title">Thanks for watching!</div>
-              <button type="button" class="replay-btn" id="replay">↺ Replay</button>
-            </div>
+        <div class="vimeo-embed">
+          <iframe
+            id="teaserFrame"
+            src="https://player.vimeo.com/video/1120087399?h=ec76700423&badge=0&autopause=1&muted=1&playsinline=1"
+            title="RenoChain - teaser video"
+            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            loading="lazy"
+            frameborder="0"
+            allowfullscreen
+          ></iframe>
+        </div>
+      
+        <!-- 🔽 New overlay -->
+        <div id="endcard" class="endcard">
+          <div class="endcard-inner">
+            <div class="endcard-title">Thanks for watching!</div>
+            <button class="replay-btn" id="replayBtn">⟳ Replay</button>
           </div>
         </div>
-        
-        
+      </div>
+
         <!-- Partners -->
         <div class="partners">
           <h3 id="collab">In collaboration with</h3>
@@ -676,6 +640,24 @@
   const phoneOk = v => !v || /^(\+\d{6,15}|\d{6,15}|\(\+?\d+\)[\d\s-]+)$/.test(v);
 
   const form = document.getElementById("gateForm");
+
+  // --- Vimeo overlay handling ---
+  const iframe = document.getElementById("teaser-video");
+  const player = new Vimeo.Player(iframe);
+  const endcard = document.getElementById("endcard");
+  const replayBtn = document.getElementById("replayBtn");
+  
+  // Show overlay when video ends
+  player.on("ended", () => {
+    endcard.style.display = "flex";  // reveal grey overlay with button
+  });
+  
+  // Hide overlay + replay when clicked
+  replayBtn.addEventListener("click", () => {
+    endcard.style.display = "none";
+    player.setCurrentTime(0).then(() => player.play());  // restart video
+  });
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
