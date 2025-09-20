@@ -1,49 +1,218 @@
+<!-- Top-level document type triggers standards mode in browsers -->
 <!DOCTYPE html>
+<!-- Root html element with language set to English for accessibility and SEO -->
 <html lang="en">
 <head>
+  <!-- Character encoding ensures correct rendering of all characters -->
   <meta charset="utf-8" />
+  <!-- Viewport makes the layout responsive on mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Title shown in browser tabs and used by search engines -->
   <title>RenoChain — Video (EN)</title>
+  <!-- Hint the browser to preconnect to Google Fonts origin for faster font loading -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Import Inter font with the weights we use in this page -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <!-- Open Graph / Twitter metadata improves link previews when shared -->
+  <meta property="og:title" content="RenoChain — Million Program Renovation" />
+  <meta property="og:description" content="Watch the full-length overview and explore how RenoChain streamlines large-scale renovation programs." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/RenoChain_Logo_500X.png" />
+  <meta property="twitter:card" content="summary_large_image" />
+
+  <!-- =====================
+  Page styles (CSS)
+  ===================== -->
   <style>
-    :root{--text:#0f1b14;--muted:#5e6b63;--bg:#f5f7f6;--card:#fff;}
+    /* ---------------------- */
+    /* Design tokens (colors) */
+    /* ---------------------- */
+    :root{ /* Root CSS variables for reuse across components */
+    --text:#0f1b14; /* Primary text color */
+    --muted:#5e6b63; /* Muted secondary text */
+    --bg:#f5f7f6; /* Page background */
+    --card:#fff; /* Card background */
+    --border:rgba(0,0,0,.08); /* Subtle borders */
+    --primary:#2563eb; /* Accent (links/buttons) */
+    }
+    /* Use border-box for predictable sizing */
     *{box-sizing:border-box}
+    /* Base typography and colors */
     body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;background:var(--bg);color:var(--text)}
+    /* Constrains content width and adds page padding */
     .shell{max-width:1100px;margin:0 auto;padding:28px}
+    /* Header layout: only brand on the left */
     header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    /* Brand lockup: logo and wordmark */
     .brand{display:flex;gap:12px;align-items:center}
+    /* Logo sizing with soft rounding */
     .brand img{height:52px;border-radius:10px}
+    /* Small helper line under the brand */
     .tag{font-size:12px;color:var(--muted)}
+    /* Generic card container */
     .card{background:var(--card);border:1px solid rgba(0,0,0,.08);border-radius:18px;padding:22px}
+    /* H1 style for main block headings */
     .headline{font-size:32px;margin:8px 0 14px}
+    /* Supportive paragraph styling */
+    .sub{font-size:14px;color:var(--muted);margin-top:6px}
+    /* Maintain 16:9 frame for video player */
     .video{aspect-ratio:16/9;border-radius:14px;overflow:hidden;border:1px solid rgba(0,0,0,.08);background:#000}
+    /* Make iframe fill the .video container */
     .video iframe,.video video{width:100%;height:100%;display:block}
+    /* Link styling for inline CTAs */
+    a.inline{color:var(--primary);text-decoration:none}
+    /* Section rhythm */
+    section{margin-top:22px}
+    /* H2 style for sections */
+    .section-title{font-size:22px;margin:0 0 10px}
+    /* Small uppercase kicker above section titles */
+    .kicker{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+
+    /* ------------------------------ */
+    /* Steps list (structure & style) */
+    /* ------------------------------ */
+    .steps{display:grid;gap:10px} /* Vertical stack of steps with spacing */
+    /* Each step row with number badge + text */
+    .step{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.75); /* translucent for bg art */
+    border:1px solid var(--border);border-radius:12px;padding:12px}
+    /* Number badge style */
+    .step .no{width:30px;height:30px;border-radius:10px;background:#eaf0ff;display:grid;place-items:center;font-weight:600}
+
+    /* ------------------------------------------------------- */
+    /* HOW-IT-WORKS background using supplied process visuals */
+    /* ------------------------------------------------------- */
+    .how{position:relative;overflow:hidden} /* Create a stacking context for pseudo elements */
+    /* Decorative background layer with the super-wide image */
+    .how::before{content:"";position:absolute;inset:0; /* Cover the section */
+    background-image:url('/images/RenoChainProcess_SuperWide.png'); /* Desktop artwork */
+    background-size:cover; /* Fill while preserving ratio */
+    background-position:center; /* Keep center in view */
+    background-repeat:no-repeat; /* Prevent tiling */
+    opacity:.18; /* Make subtle */
+    filter:saturate(1) contrast(1.05) /* Slight pop without overpowering */
+    }
+    /* Top-to-bottom white veil to ensure text contrast */
+    .how::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.92))}
+    /* Lift actual section content above bg layers */
+    .how > *{position:relative}
+    /* Swap to the less-wide artwork on small screens for better cropping */
+    @media (max-width: 900px){
+    .how::before{background-image:url('/images/RCS.png');opacity:.22}
+    }
+
+    /* -------------------- */
+    /* Call-to-action area */
+    /* -------------------- */
+    .cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    /* Primary button */
+    .btn{display:inline-block;background:var(--primary);color:#fff;text-decoration:none;padding:10px 14px;border-radius:10px;border:1px solid rgba(0,0,0,.1)}
+    /* Secondary (ghost) button */
+    .ghost{background:#eef2ff;color:#183066}
+    /* Footer text styling */
+    footer{margin:28px 0 0;color:var(--muted);font-size:12px;text-align:center}
     a.back{display:inline-block;margin-top:14px;color:#2563eb;text-decoration:none}
   </style>
+
+  <!-- Structured data helps search engines understand this video section -->
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org", /* Use Schema.org vocabulary */
+  "@type": "VideoObject", /* Describe a video object */
+  "name": "RenoChain — Full-length overview (English)", /* Name shown in rich results */
+  "description": "An overview of RenoChain and how it accelerates Million Program Renovation.",
+  "thumbnailUrl": ["/RenoChain_Logo_500X.png"], /* Preview image */
+  "uploadDate": "2025-01-01", /* Best estimate of publication */
+  "publisher": {"@type": "Organization", "name": "RenoChain"}, /* Organization publisher */
+  "embedUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ" /* Embed URL for the video */
+  }
+  </script>  
 </head>
+  
 <body>
+  <!-- Shell centers the content and applies horizontal padding -->
   <div class="shell">
+    <!-- Header contains the brand  -->
     <header>
+      <!-- Brand group for logo and label -->
       <div class="brand">
+        <!-- Logo image with alt text for accessibility -->
         <img src="/RenoChain_Logo_500X.png" alt="RenoChain logo" />
+        <!-- Wordmark and small campaign tag line -->
         <div>
-          <strong>RenoChain</strong><div class="tag">Million Program Renovation — Video (English)</div>
+          <strong>RenoChain</strong>  <!-- Bold brand name for emphasis -->
+          <div class="tag">Million Program Renovation — Video (English)</div>  <!-- Context line -->
         </div>
       </div>
     </header>
 
-    <div class="card">
-      <div class="headline">Full-length video (English)</div>
-      <div class="video">
-        <!-- ⛳ Replace the src below with your real video -->
-        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                title="RenoChain Video EN" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen></iframe>
-      </div>
-      <a class="back" href="/">← Back to form</a>
-    </div>
+    <!-- Main video block -->
+  <article class="card" aria-labelledby="video-title">
+  <h1 id="video-title" class="headline">Full-length video (English)</h1> <!-- Main headline -->
+  <p class="sub">Watch the overview of RenoChain and how we streamline large-scale renovation programs.</p> <!-- Context text -->
+  <div class="video" role="region" aria-label="RenoChain campaign video"> <!-- Accessible container for player -->
+  <!-- YouTube embed: replace the src with the actual video ID when ready -->
+  <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="RenoChain Video EN" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
   </div>
+  <!-- Link to Swedish-language page if available -->
+  <p class="sub" style="margin-top:10px">Prefer Swedish? <a class="inline" href="/se/video">Visa videon på svenska</a></p>
+  <!-- Back link for users arriving from a form page -->
+  <a class="inline" href="/">← Back to form</a>
+  </article>
+
+  <!-- About section (copy aligned to your process) -->
+  <section id="about" class="card" aria-labelledby="about-title">
+  <div class="kicker">About</div> <!-- Small section label -->
+  <h2 id="about-title" class="section-title">What is RenoChain?</h2> <!-- Section title -->
+  <p>RenoChain transforms façade and envelope renovation into a predictable, industrialized flow. We start with a rapid scan to create a digital twin, generate an engineered wall system and instant quote, manufacture in a balanced smart‑factory setup, and complete installation in weeks—not months.</p> <!-- Overview paragraph tailored to the process -->
+  </section>
+
+  <!-- How-it-works with decorative process artwork in the background -->
+  <section class="card how" aria-labelledby="how-title">
+  <div class="kicker">How it works</div> <!-- Section label -->
+  <h2 id="how-title" class="section-title">Our process — Scan → Builder → System → Factory → Install</h2> <!-- Descriptive title -->
+  <!-- The background images are applied via CSS pseudo-elements; content below is the readable steps list. -->
+  <div class="steps">
+  <!-- Step 1: RenoChain Scan -->
+  <div class="step"><div class="no" aria-hidden="true">1</div><div><strong>RenoChain Scan.</strong> We quickly scan the building to extract measurements and volumes. A high‑fidelity digital twin is created for engineering and costing.</div></div>
+  <!-- Step 2: RenoChain Builder -->
+  <div class="step"><div class="no" aria-hidden="true">2</div><div><strong>RenoChain Builder.</strong> Our software imports the scan model and constructs a new, energy‑efficient wall system. A complete, itemized quote is typically ready in ~30 minutes.</div></div>
+  <!-- Step 3: RenoChain System -->
+  <div class="step"><div class="no" aria-hidden="true">3</div><div><strong>RenoChain System.</strong> The building system is engineered to be cost‑effective, sustainable, and climate‑smart with standardized interfaces and verified performance.</div></div>
+  <!-- Step 4: RenoChain Factory -->
+  <div class="step"><div class="no" aria-hidden="true">4</div><div><strong>RenoChain Factory.</strong> A smart‑factory approach balances automation with skilled craftsmanship to deliver consistent quality, fair production, and reliable lead times.</div></div>
+  <!-- Step 5: RenoChain Install -->
+  <div class="step"><div class="no" aria-hidden="true">5</div><div><strong>RenoChain Install.</strong> Professional installation teams complete a full envelope install on an average‑sized property in about three weeks, with standardized QA and documentation.</div></div>
+  </div>
+  </section>
+
+  <!-- Contact / CTA section with two actions and a one-pager link -->
+  <section id="contact" class="card" aria-labelledby="cta-title">
+  <div class="kicker">Get in touch</div> <!-- Section label -->
+  <h2 id="cta-title" class="section-title">Ready to explore RenoChain?</h2> <!-- Title -->
+  <div class="cta"> <!-- Horizontal button layout -->
+  <a class="btn" href="/book-demo">Book a 30‑min walkthrough</a> <!-- Primary CTA -->
+  <a class="btn ghost" href="mailto:hello@renochain.example">Email us</a> <!-- Secondary CTA -->
+  <span class="sub">Or grab the <a class="inline" href="/one-pager.pdf">one‑pager</a>.</span> <!-- Alternative action -->
+  </div>
+  </section>
+
+  <!-- Footer shows copyright; year is filled by tiny JS below -->
+  <footer>
+  © <span id="year"></span> RenoChain — Million Program Renovation
+  </footer>
+  </div>
+
+  <!-- ===================== -->
+  <!-- Minimal helper script -->
+  <!-- ===================== -->
+  <script>
+  // Get a reference to the <span id="year"> element in the footer
+  const yearEl = document.getElementById('year');
+  // Compute the current year from the user's local time
+  const currentYear = new Date().getFullYear();
+  // Inject the year number into the span's text content
+  yearEl.textContent = currentYear;
+  </script>
 </body>
 </html>
