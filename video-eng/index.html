@@ -74,7 +74,7 @@
     /* ------------------------------ */
     .steps{display:grid;gap:10px} /* Vertical stack of steps with spacing */
     /* Each step row with number badge + text */
-    .step{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.75); /* translucent for bg art */
+    .step{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.88); /* translucent for bg art */
     border:1px solid var(--border);border-radius:12px;padding:12px}
     /* Number badge style */
     .step .no{width:30px;height:30px;border-radius:10px;background:#eaf0ff;display:grid;place-items:center;font-weight:600}
@@ -82,23 +82,24 @@
     /* ------------------------------------------------------- */
     /* HOW-IT-WORKS background using supplied process visuals */
     /* ------------------------------------------------------- */
-    .how{position:relative;overflow:hidden} /* Create a stacking context for pseudo elements */
+    .how{position:relative;overflow:hidden;background:transparent;} /* Create a stacking context for pseudo elements */
     /* Decorative background layer with the super-wide image */
     .how::before{content:"";position:absolute;inset:0; /* Cover the section */
     background-image:url('/RCS_Wide.png'); /* Desktop artwork */
     background-size:cover; /* Fill while preserving ratio */
     background-position:center; /* Keep center in view */
     background-repeat:no-repeat; /* Prevent tiling */
-    opacity:.18; /* Make subtle */
+    opacity:.35; /* Make subtle */
     filter:saturate(1) contrast(1.05) /* Slight pop without overpowering */
+    z-index:0;  /* put behind overlay + content */
     }
     /* Top-to-bottom white veil to ensure text contrast */
-    .how::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.92))}
+    .how::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.92));z-index:1;}
     /* Lift actual section content above bg layers */
-    .how > *{position:relative}
+    .how > *{position:relative;z-index:2;}
     /* Swap to the less-wide artwork on small screens for better cropping */
     @media (max-width: 900px){
-    .how::before{background-image:url('/RCS.png');opacity:.22}
+    .how::before{background-image:url('/RCS.png');opacity:.40}
     }
 
     /* -------------------- */
