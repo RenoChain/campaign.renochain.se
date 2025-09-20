@@ -85,7 +85,7 @@
     .how{position:relative;overflow:hidden} /* Create a stacking context for pseudo elements */
     /* Decorative background layer with the super-wide image */
     .how::before{content:"";position:absolute;inset:0; /* Cover the section */
-    background-image:url('./RCS_Wide.png'); /* Desktop artwork */
+    background-image:url('/RCS_Wide.png'); /* Desktop artwork */
     background-size:cover; /* Fill while preserving ratio */
     background-position:center; /* Keep center in view */
     background-repeat:no-repeat; /* Prevent tiling */
@@ -98,7 +98,7 @@
     .how > *{position:relative}
     /* Swap to the less-wide artwork on small screens for better cropping */
     @media (max-width: 900px){
-    .how::before{background-image:url('./RCS.png');opacity:.22}
+    .how::before{background-image:url('/RCS.png');opacity:.22}
     }
 
     /* -------------------- */
