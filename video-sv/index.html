@@ -6,8 +6,16 @@
   <title>RenoChain — Video (SV)</title>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="RenoChain — Miljonprogramsrenovering" />
+  <meta property="og:description" content="Se den fullständiga genomgången och upptäck hur RenoChain effektiviserar storskaliga renoveringsprogram." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/RenoChain_Logo_500X.png" />
+  <meta property="twitter:card" content="summary_large_image" />
+  
   <style>
-    :root{--text:#0f1b14;--muted:#5e6b63;--bg:#f5f7f6;--card:#fff;}
+    :root{--text:#0f1b14;--muted:#5e6b63;--bg:#f5f7f6;--card:#fff;--border:rgba(0,0,0,.08);--primary:#2563eb}
     *{box-sizing:border-box}
     body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;background:var(--bg);color:var(--text)}
     .shell{max-width:1100px;margin:0 auto;padding:28px}
@@ -15,13 +23,50 @@
     .brand{display:flex;gap:12px;align-items:center}
     .brand img{height:52px;border-radius:10px}
     .tag{font-size:12px;color:var(--muted)}
+    
     .card{background:var(--card);border:1px solid rgba(0,0,0,.08);border-radius:18px;padding:22px}
     .headline{font-size:32px;margin:8px 0 14px}
+    .sub{font-size:14px;color:var(--muted);margin-top:6px}
+    
     .video{aspect-ratio:16/9;border-radius:14px;overflow:hidden;border:1px solid rgba(0,0,0,.08);background:#000}
     .video iframe,.video video{width:100%;height:100%;display:block}
-    a.back{display:inline-block;margin-top:14px;color:#2563eb;text-decoration:none}
+    
+    a.inline{color:var(--primary);text-decoration:none}
+    section{margin-top:22px}
+    .section-title{font-size:22px;margin:0 0 10px}
+    .kicker{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+    
+    .steps{display:grid;gap:10px}
+    .step{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.88);border:1px solid var(--border);border-radius:12px;padding:12px}
+    .step .no{width:30px;height:30px;border-radius:10px;background:#eaf0ff;display:grid;place-items:center;font-weight:600}
+    
+    /* How it works background artwork */
+    .how{position:relative;overflow:hidden;background:transparent}
+    .how::before{content:"";position:absolute;inset:0;background-image:url('/RCS_Wide.png');background-size:cover;background-position:center;background-repeat:no-repeat;opacity:.35;filter:saturate(1) contrast(1.05);z-index:0}
+    .how::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,.20), rgba(255,255,255,.45));z-index:1}
+    .how>*{position:relative;z-index:2}
+    @media (max-width:900px){.how::before{background-image:url('/RCS.png');opacity:.40}}
+    
+    .cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .btn{display:inline-block;background:var(--primary);color:#fff;text-decoration:none;padding:10px 14px;border-radius:10px;border:1px solid rgba(0,0,0,.1)}
+    .ghost{background:#eef2ff;color:#183066}
+    footer{margin:28px 0 0;color:var(--muted);font-size:12px;text-align:center}
   </style>
+
+  <script type="application/ld+json">
+  {
+  "@context":"https://schema.org",
+  "@type":"VideoObject",
+  "name":"RenoChain — Lång version (svenska)",
+  "description":"En genomgång av RenoChain och hur vi accelererar miljonprogramsrenovering.",
+  "thumbnailUrl":["/RenoChain_Logo_500X.png"],
+  "uploadDate":"2025-01-01",
+  "publisher":{"@type":"Organization","name":"RenoChain"},
+  "embedUrl":"https://player.vimeo.com/video/1120085403?h=06ae2ee546"
+  }
+  </script>
 </head>
+  
 <body>
   <div class="shell">
     <header>
@@ -33,17 +78,53 @@
       </div>
     </header>
 
-    <div class="card">
-      <div class="headline">Hela videon (Svenska)</div>
-      <div class="video">
-        <!-- ⛳ Byt till din riktiga video -->
-        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                title="RenoChain Video SV" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen></iframe>
+    <article class="card" aria-labelledby="video-title">
+      <h1 id="video-title" class="headline">Video — Lång version (svenska)</h1>
+      <p class="sub">Se genomgången av RenoChain och hur vi effektiviserar storskaliga renoveringsprogram.</p>
+      <div class="video" role="region" aria-label="RenoChain kampanjvideo">
+      <iframe src="https://player.vimeo.com/video/1120085403?h=06ae2ee546&badge=0&autopause=0&player_id=0&app_id=58479" title="RenoChain – full video" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" allowfullscreen></iframe>
       </div>
-      <a class="back" href="/">← Tillbaka till formuläret</a>
-    </div>
+      <p class="sub" style="margin-top:10px">Föredrar du engelska? <a class="inline" href="/video-eng/">Se videon på engelska</a></p>
+      <a class="inline" href="/">← Tillbaka till formuläret</a>
+    </article>
+    
+    <section id="about" class="card" aria-labelledby="about-title">
+      <div class="kicker">Om</div>
+      <h2 id="about-title" class="section-title">Vad är RenoChain?</h2>
+      <p>RenoChain transformerar fasad- och klimatskalsrenovering till ett förutsägbart, industrialiserat flöde. Vi börjar med en snabb skanning för att skapa en digital tvilling, tar fram ett konstruerat väggsystem och en omedelbar offert, producerar i en balanserad smartfabrik och färdigställer installationen på veckor – inte månader.</p>
+    </section>
+    
+    <section class="card how" aria-labelledby="how-title">
+      <div class="kicker">Så fungerar det</div>
+      <h2 id="how-title" class="section-title">Vår process — Scan → Builder → System → Factory → Install</h2>
+      <div class="steps">
+      <div class="step"><div class="no" aria-hidden="true">1</div><div><strong>RenoChain Scan.</strong> Vi skannar byggnaden snabbt för att ta fram mått och volymer. En högupplöst digital tvilling skapas för konstruktion och kalkyl.</div></div>
+      <div class="step"><div class="no" aria-hidden="true">2</div><div><strong>RenoChain Builder.</strong> Vårt program importerar skanningsmodellen och konstruerar ett nytt, energieffektivt väggsystem. En komplett, specificerad offert är normalt klar på ~30 minuter.</div></div>
+      <div class="step"><div class="no" aria-hidden="true">3</div><div><strong>RenoChain System.</strong> Byggsystemet är utvecklat för att vara kostnadseffektivt, hållbart och klimatsmart – med standardiserade gränssnitt och verifierad prestanda.</div></div>
+      <div class="step"><div class="no" aria-hidden="true">4</div><div><strong>RenoChain Factory.</strong> En smart fabriksuppläggning balanserar automation med yrkesskicklighet för jämn kvalitet, rättvis produktion och tillförlitliga ledtider.</div></div>
+      <div class="step"><div class="no" aria-hidden="true">5</div><div><strong>RenoChain Install.</strong> Våra montageteam slutför en komplett installation på en genomsnittlig fastighet på cirka tre veckor, med standardiserad egenkontroll och dokumentation.</div></div>
+      </div>
+    </section>
+
+    <section id="contact" class="card" aria-labelledby="cta-title">
+      <div class="kicker">Kontakta oss</div>
+      <h2 id="cta-title" class="section-title">Redo att utforska RenoChain?</h2>
+      <div class="cta">
+      <a class="btn" href="/book-demo">Boka en 30‑minuters genomgång</a>
+      <a class="btn ghost" href="mailto:hej@renochain.se">Mejla oss</a>
+      <span class="sub">Eller hämta <a class="inline" href="/one-pager.pdf">produktbladet</a>.</span>
+      </div>
+    </section>
+    
+    <footer>
+    © <span id="year"></span> RenoChain — Miljonprogramsrenovering
+    </footer>
   </div>
+
+  <script src="https://player.vimeo.com/api/player.js"></script>
+  
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
