@@ -485,7 +485,8 @@
     </section>
 
     <footer>
-      © <span id="yr"></span> RenoChain — All rights reserved. · <a href="#" aria-label="Privacy policy">Privacy</a>
+      © <span id="yr"></span> RenoChain — All rights reserved. · 
+      <a id="privacyLink" href="#" target="_blank" rel="noopener noreferrer">Privacy</a>
     </footer>
   </div>
 
@@ -509,7 +510,7 @@
       "label-role": "Role",
       "label-notes": "What are you hoping to learn?",
       "role-placeholder": "Select your role",
-      "consent-text": "I agree to the processing of my personal data for accessing this content and follow-up about related services.",
+      "consent_html":'I consent to my personal data being processed in accordance with the <a href="{URL}" target="_blank" rel="noopener noreferrer">privacy policy</a> and to receiving newsletters and information about services and offers from RenoChain. You can unsubscribe at any time via the link in our emails.',
       "submit-btn": "Unlock & Watch",
       ph_name: "Jane Doe",
       ph_email: "jane@acme.se",
@@ -518,7 +519,8 @@
       ph_notes: "Optional",
       roles: ["CEO / Founder","Operations","Procurement","Project Manager","Engineer","Sales / Marketing","Other"],
       success_msg: "Thank you {NAME}!. Please check your inbox for the video link.",
-      success_hint: "If you don’t see the email soon, please also check your spam or junk folder."
+      success_hint: "If you don’t see the email soon, please also check your spam or junk folder.",
+      privacy_label: "Privacypolicy"
     },
     sv: {
       headline: "Lås upp hela videon",
@@ -533,7 +535,7 @@
       "label-role": "Roll",
       "label-notes": "Vad vill du få ut?",
       "role-placeholder": "Välj din roll",
-      "consent-text": "Jag samtycker till att mina personuppgifter behandlas för att få tillgång till detta innehåll och för uppföljning om relaterade tjänster.",
+      "consent_html":'Jag samtycker till att mina personuppgifter behandlas enligt <a href="{URL}" target="_blank" rel="noopener noreferrer">integritetspolicyn</a> och att jag får nyhetsbrev och information om tjänster och erbjudanden från RenoChain. Du kan när som helst avregistrera dig via länken i våra utskick.',
       "submit-btn": "Lås upp och titta",
       ph_name: "Anna Svensson",
       ph_email: "anna@acme.se",
@@ -542,7 +544,8 @@
       ph_notes: "Valfritt",
       roles: ["VD / Grundare","Drift","Inköp","Projektledare","Ingenjör","Sälj / Marknad","Annat"],
       success_msg: "Tack {NAME}!. Kontrollera din inkorg för videolänken.",
-      success_hint: "Om du inte ser e-postmeddelandet snart, titta även i din skräppostmapp."
+      success_hint: "Om du inte ser e-postmeddelandet snart, titta även i din skräppostmapp.",
+      privacy_label: "Integritetspolicy",
     }
   };
 
@@ -553,6 +556,12 @@
       const el = document.getElementById(id);
       if(!el) return;
       if(id === "role-placeholder") { el.textContent = dict[id]; return; }
+      if (id === "consent-text") {
+        // Use the HTML version and inject the URL
+        const html = (dict.consent_html || "").replace("{URL}", PRIVACY_URL);
+        el.innerHTML = html;
+        return;
+      }
       el.textContent = dict[id];
     });
 
@@ -576,6 +585,12 @@
         opt.textContent = r;
         roleSel.appendChild(opt);
       });
+    }
+
+    const pLink = document.getElementById("privacyLink");
+    if (pLink) {
+      pLink.textContent = dict.privacy_label || "Privacy";
+      pLink.href = PRIVACY_URL;
     }
 
     document.documentElement.lang = lang;
@@ -656,6 +671,7 @@
   // ========= CONFIG: Replace with your values =========
   const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbzA0Xe1K2pbpH_ox1T-P7gKrwbSvGk4mh2mmWV74OtxaRkB_4Z8HVTj8zdKYeEVwbiwwg/exec";
   const VIDEO_URL   = "https://xqnnv.beeweb-orange.io/";
+  const PRIVACY_URL = "https://renochain.se/privacy"; // // Where our policy lives:
   // ====================================================
 
   // Fill year and UTMs/context
