@@ -204,6 +204,14 @@
     @media (max-width: 480px){.logos{grid-template-columns:repeat(2,1fr)}}
     footer{margin:24px 0 8px;text-align:center;color:var(--muted);font-size:12px}
     a{color:#d2e4ff}
+    /* Footer privacy link styling (overrides generic a{}) */
+    footer a#privacyLink{
+      color: var(--muted);
+      text-decoration: none;
+    }
+    footer a#privacyLink:hover{
+      text-decoration: underline;
+    }
     
     /* language switcher */
     .lang-switch{display:flex;gap:8px}
@@ -489,7 +497,6 @@
       <a id="privacyLink" href="#" target="_blank" rel="noopener noreferrer">Privacy</a>
     </footer>
   </div>
-
   
   <!-- Vimeo API (optional, only needed if you’ll control play/pause via JS later) -->
   <script defer src="https://player.vimeo.com/api/player.js"></script>
@@ -520,7 +527,7 @@
       roles: ["CEO / Founder","Operations","Procurement","Project Manager","Engineer","Sales / Marketing","Other"],
       success_msg: "Thank you {NAME}!. Please check your inbox for the video link.",
       success_hint: "If you don’t see the email soon, please also check your spam or junk folder.",
-      privacy_label: "Privacypolicy"
+      privacy_label: "Privacy policy"
     },
     sv: {
       headline: "Lås upp hela videon",
@@ -671,7 +678,7 @@
   // ========= CONFIG: Replace with your values =========
   const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbzA0Xe1K2pbpH_ox1T-P7gKrwbSvGk4mh2mmWV74OtxaRkB_4Z8HVTj8zdKYeEVwbiwwg/exec";
   const VIDEO_URL   = "https://xqnnv.beeweb-orange.io/";
-  const PRIVACY_URL = "https://renochain.se/privacy"; // // Where our policy lives:
+  const PRIVACY_URL = "https://campaign.renochain.se/privacy.html";  // Where our policy lives:
   // ====================================================
 
   // Fill year and UTMs/context
