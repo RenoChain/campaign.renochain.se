@@ -458,25 +458,11 @@
           <input type="text" name="website" id="website" class="hp" style="position:absolute;left:-9999px;top:-9999px" tabindex="-1" autocomplete="off" />
 
           <!-- Hidden attribution fields (auto-filled by JS) -->
-          <input type="hidden" name="utm_source" id="utm_source" />
-          <input type="hidden" name="utm_medium" id="utm_medium" />
-          <input type="hidden" name="utm_campaign" id="utm_campaign" />
-          <input type="hidden" name="utm_content" id="utm_content" />
-          <input type="hidden" name="utm_term" id="utm_term" />
-          <input type="hidden" name="referrer" id="referrer" />
           <input type="hidden" name="landing_url" id="landing_url" />
           <input type="hidden" name="user_agent" id="user_agent" />
           <input type="hidden" name="ip" id="ip" />
-          <!-- Hidden tech + geo fields -->
-          <input type="hidden" name="operating_system" id="operating_system" />
-          <input type="hidden" name="device_type" id="device_type" />
-          <input type="hidden" name="browser" id="browser" />
-          <input type="hidden" name="platform" id="platform" />
-          <input type="hidden" name="continent" id="continent" />
-          <input type="hidden" name="country" id="country" />
-          <input type="hidden" name="region" id="region" />
-          <input type="hidden" name="city" id="city" />
-          
+          <input type="hidden" name="Language" id="Language" />
+        
           <button class="btn" type="submit" id="submit-btn">Unlock & Watch</button>
           <div id="success" class="success-wrap" role="status" aria-live="polite" style="display:none;">
           <span class="checkbox" aria-hidden="true">
@@ -561,17 +547,34 @@
     }
   };
 
+  // ========= CONFIG: Replace with your values =========
+  const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbzA0Xe1K2pbpH_ox1T-P7gKrwbSvGk4mh2mmWV74OtxaRkB_4Z8HVTj8zdKYeEVwbiwwg/exec";
+  // ====================================================
+
+  // Fill year
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // ---- Language handling (+ write hidden Language field) ----
+  function setLanguageField(langCode) {
+    const el = document.getElementById("Language");
+    if (!el) return;
+    el.value = (langCode === "sv") ? "Swedish" : "English";
+  }
+
   function applyI18n(lang){
     const dict = i18n[lang] || i18n.en;
-    const ids = ["headline","lede","collab","label-name","label-email","label-phone","label-company","label-role","label-notes","consent-text","submit-btn","role-placeholder", "site-subtitle", "page_title"];
+    const ids = [
+      "headline","lede","collab",
+      "label-name","label-email","label-phone","label-company","label-role","label-notes",
+      "consent-text","submit-btn","role-placeholder",
+      "site-subtitle","page_title"
+    ];
     ids.forEach(id=>{
       const el = document.getElementById(id);
       if(!el) return;
       if(id === "role-placeholder") { el.textContent = dict[id]; return; }
       if (id === "consent-text") {
-        // Use the HTML version and inject the URL
-        const html = (dict.consent_html || "").replace("{URL}", PRIVACY_URL);
-        el.innerHTML = html;
+        el.innerHTML = (dict.consent_html || "").replace("{URL}", PRIVACY_URL);
         return;
       }
       el.textContent = dict[id];
@@ -582,9 +585,8 @@
     setPh("name", dict.ph_name);
     setPh("email", dict.ph_email);
     setPh("phone", dict.ph_phone);
-    setPh("company", dict.ph_company);
-    const notesEl = document.getElementById("notes");
-    if (notesEl) notesEl.placeholder = dict.ph_notes;
+    const company = document.getElementById("company"); if (company) company.placeholder = dict.ph_company;
+    const notesEl = document.getElementById("notes");   if (notesEl) notesEl.placeholder = dict.ph_notes;
 
     // roles
     const roleSel = document.getElementById("role");
@@ -592,25 +594,74 @@
       const placeholder = roleSel.querySelector("option#role-placeholder");
       roleSel.innerHTML = "";
       if (placeholder) roleSel.appendChild(placeholder);
-      dict.roles.forEach(r=>{
+      (dict.roles || []).forEach(r=>{
         const opt = document.createElement("option");
         opt.textContent = r;
         roleSel.appendChild(opt);
       });
     }
 
+    // footer privacy text
     const pLink = document.getElementById("privacyLink");
     if (pLink) {
       pLink.textContent = dict.privacy_label || "Privacy";
       pLink.href = PRIVACY_URL;
     }
+    
+  // function applyI18n(lang){
+  //   const dict = i18n[lang] || i18n.en;
+  //   const ids = ["headline","lede","collab","label-name","label-email","label-phone","label-company","label-role","label-notes","consent-text","submit-btn","role-placeholder", "site-subtitle", "page_title"];
+  //   ids.forEach(id=>{
+  //     const el = document.getElementById(id);
+  //     if(!el) return;
+  //     if(id === "role-placeholder") { el.textContent = dict[id]; return; }
+  //     if (id === "consent-text") {
+  //       // Use the HTML version and inject the URL
+  //       const html = (dict.consent_html || "").replace("{URL}", PRIVACY_URL);
+  //       el.innerHTML = html;
+  //       return;
+  //     }
+  //     el.textContent = dict[id];
+  //   });
+
+    // // placeholders
+    // const setPh = (id, val) => { const el = document.getElementById(id); if (el) el.placeholder = val; };
+    // setPh("name", dict.ph_name);
+    // setPh("email", dict.ph_email);
+    // setPh("phone", dict.ph_phone);
+    // setPh("company", dict.ph_company);
+    // const notesEl = document.getElementById("notes");
+    // if (notesEl) notesEl.placeholder = dict.ph_notes;
+
+    // // roles
+    // const roleSel = document.getElementById("role");
+    // if(roleSel){
+    //   const placeholder = roleSel.querySelector("option#role-placeholder");
+    //   roleSel.innerHTML = "";
+    //   if (placeholder) roleSel.appendChild(placeholder);
+    //   dict.roles.forEach(r=>{
+    //     const opt = document.createElement("option");
+    //     opt.textContent = r;
+    //     roleSel.appendChild(opt);
+    //   });
+    // }
+
+    // const pLink = document.getElementById("privacyLink");
+    // if (pLink) {
+    //   pLink.textContent = dict.privacy_label || "Privacy";
+    //   pLink.href = PRIVACY_URL;
+    // }
 
     document.documentElement.lang = lang;
     localStorage.setItem("renochain_lang", lang);
 
+    // Button active state
     document.querySelectorAll(".lang").forEach(btn=>{
       btn.classList.toggle("active", btn.dataset.lang === lang);
     });
+
+    // Write hidden Language field for the sheet
+    setLanguageField(lang);
   }
 
   // init language
@@ -626,75 +677,28 @@
     });
   })();
 
-  // ---------- Client hints: OS / device / browser / platform ----------
-  function detectOS(ua) {
-    ua = ua || navigator.userAgent;
-    if (/Windows NT/i.test(ua)) return "Windows";
-    if (/Mac OS X/i.test(ua)) return "macOS";
-    if (/\biPhone|\biPad|\biPod/i.test(ua)) return "iOS";
-    if (/Android/i.test(ua)) return "Android";
-    if (/Linux/i.test(ua)) return "Linux";
-    return "Other";
-  }
-  function detectDeviceType(ua) {
-    ua = ua || navigator.userAgent;
-    if (/\b(iPad|Tablet)\b/i.test(ua)) return "Tablet";
-    if (/\b(Mobi|Android|iPhone|iPod)\b/i.test(ua)) return "Mobile";
-    return "Desktop";
-  }
-  function detectBrowser(ua) {
-    ua = ua || navigator.userAgent;
-    if (/Edg\//.test(ua)) return "Edge";
-    if (/OPR\//.test(ua) || /Opera/.test(ua)) return "Opera";
-    if (/Chrome\//.test(ua)) return "Chrome";
-    if (/Safari\//.test(ua) && !/Chrome\//.test(ua)) return "Safari";
-    if (/Firefox\//.test(ua)) return "Firefox";
-    return "Other";
-  }
-
-  // Fill client hints on load (best effort)
-  (function fillClientFieldsOnLoad(){
-    const ua = navigator.userAgent || "";
-    const platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
+  // ---- Minimal context fields you still keep ----
+  // landing_url + user_agent are trivial; ip via ipapi
+  (function setContextBasics(){
     const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ""; };
-    set("operating_system", detectOS(ua));
-    set("device_type",      detectDeviceType(ua));
-    set("browser",          detectBrowser(ua));
-    set("platform",         platform);
+    set("landing_url", location.href);
+    set("user_agent", navigator.userAgent || "");
   })();
 
-  // ---------- IP-based geolocation (awaitable) ----------
-  let geoReady = (async function fillGeoByIP(){
+  // Fetch public IP (best-effort)
+  let ipReady = (async function fillIP(){
     try {
       const resp = await fetch("https://ipapi.co/json/");
       if (!resp.ok) return;
       const d = await resp.json();
-      const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ""; };
-      set("continent", d.continent_code || "");
-      set("country",   d.country_name    || "");
-      set("region",    d.region          || "");
-      set("city",      d.city            || "");
-      set("ip",        d.ip              || "");
+      const ipEl = document.getElementById("ip");
+      if (ipEl) ipEl.value = d.ip || "";
     } catch(e) {
-      console.warn("Geo IP lookup failed", e);
+      console.warn("IP lookup failed", e);
     }
   })();
 
-  // ========= CONFIG: Replace with your values =========
-  const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbzA0Xe1K2pbpH_ox1T-P7gKrwbSvGk4mh2mmWV74OtxaRkB_4Z8HVTj8zdKYeEVwbiwwg/exec";
-  const VIDEO_URL   = "https://xqnnv.beeweb-orange.io/";
-  // ====================================================
-
-  // Fill year and UTMs/context
-  document.getElementById('yr').textContent = new Date().getFullYear();
-  const params = new URLSearchParams(location.search);
-  const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ""; };
-  ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].forEach(k => setVal(k, params.get(k)));
-  setVal("referrer", document.referrer || "");
-  setVal("landing_url", location.href);
-  setVal("user_agent", navigator.userAgent || "");
-
-  // Basic validators
+  // ---- Form handling ----
   const emailOk = v => /.+@.+\..+/.test(v);
   const phoneOk = v => !v || /^(\+\d{6,15}|\d{6,15}|\(\+?\d+\)[\d\s-]+)$/.test(v);
 
@@ -703,19 +707,8 @@
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // Ensure client hints are set *just in time* (covers very fast submits)
-    (function ensureClientFields(){
-      const ua = navigator.userAgent || "";
-      const platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
-      const setIfBlank = (id, val) => { const el = document.getElementById(id); if (el && !el.value) el.value = val || ""; };
-      setIfBlank("operating_system", detectOS(ua));
-      setIfBlank("device_type",      detectDeviceType(ua));
-      setIfBlank("browser",          detectBrowser(ua));
-      setIfBlank("platform",         platform);
-    })();
-
-    // Wait briefly for geo fields if still pending
-    try { await Promise.race([geoReady, new Promise(r=>setTimeout(r, 1200))]); } catch {}
+    // Wait a moment for IP if still pending (non-blocking safety)
+    try { await Promise.race([ipReady, new Promise(r=>setTimeout(r, 1200))]); } catch {}
 
     const data = new FormData(form);
 
@@ -740,24 +733,24 @@
     // Submit to Apps Script and show success (no redirect)
     try{
       await fetch(ENDPOINT_URL, { method:"POST", mode:"no-cors", body:data });
-    
+
       // Determine current language
       const saved = localStorage.getItem("renochain_lang");
       const fallback = (navigator.language || "en").toLowerCase().startsWith("sv") ? "sv" : "en";
       const lang = saved || fallback;
       const dict = i18n[lang] || i18n.en;
-    
+
       // Personalize with name if present
       const rawName = (data.get("name") || "").trim();
       const namePart = rawName ? `, ${rawName}` : "";
       const msg = (dict.success_msg || "Thank you. Please check your inbox for the video link.")
-                   .replace("{NAME}", namePart);
-    
+                    .replace("{NAME}", namePart);
+
       // Disable inputs to prevent double submits
       const btn = document.getElementById("submit-btn");
       if (btn) { btn.disabled = true; btn.style.opacity = .7; btn.style.cursor = "default"; }
       form.querySelectorAll("input, select, textarea").forEach(el => el.disabled = true);
-    
+
       // Show tick + message
       const success = document.getElementById("success");
       const successTextEl = document.getElementById("successText");
@@ -766,18 +759,112 @@
       if (successHintEl) successHintEl.textContent = dict.success_hint || "";
       if (success) {
         success.style.display = "flex";
-        success.classList.add("show");   // ✅ trigger animation
+        success.classList.add("show");
         success.scrollIntoView({ behavior: "smooth", block: "center" });
       }
-    
-      // No redirect; Mailchimp will send the email with the video link.
     }catch(err){
+      const saved = localStorage.getItem("renochain_lang");
+      const fallback = (navigator.language || "en").toLowerCase().startsWith("sv") ? "sv" : "en";
+      const lang = saved || fallback;
       alert(lang === "sv"
         ? "Något gick fel när formuläret skickades. Försök igen."
         : "Something went wrong submitting the form. Please try again.");
       console.error(err);
     }
   });
+
+  // // UTMs/context
+  // const params = new URLSearchParams(location.search);
+  // const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ""; };
+  // ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].forEach(k => setVal(k, params.get(k)));
+  // setVal("referrer", document.referrer || "");
+  // setVal("landing_url", location.href);
+  // setVal("user_agent", navigator.userAgent || "");
+
+  // // Basic validators
+  // const emailOk = v => /.+@.+\..+/.test(v);
+  // const phoneOk = v => !v || /^(\+\d{6,15}|\d{6,15}|\(\+?\d+\)[\d\s-]+)$/.test(v);
+
+  // const form = document.getElementById("gateForm");
+
+  // form.addEventListener("submit", async (e) => {
+  //   e.preventDefault();
+
+  //   // Ensure client hints are set *just in time* (covers very fast submits)
+  //   (function ensureClientFields(){
+  //     const ua = navigator.userAgent || "";
+  //     const platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
+  //     const setIfBlank = (id, val) => { const el = document.getElementById(id); if (el && !el.value) el.value = val || ""; };
+  //     setIfBlank("operating_system", detectOS(ua));
+  //     setIfBlank("device_type",      detectDeviceType(ua));
+  //     setIfBlank("browser",          detectBrowser(ua));
+  //     setIfBlank("platform",         platform);
+  //   })();
+
+  //   // Wait briefly for geo fields if still pending
+  //   try { await Promise.race([geoReady, new Promise(r=>setTimeout(r, 1200))]); } catch {}
+
+  //   const data = new FormData(form);
+
+  //   // Honeypot
+  //   if (data.get("website")) return;
+
+  //   // Validate
+  //   const errs = {};
+  //   if (!(data.get("name")||"").trim()) errs.name = "Please enter your name.";
+  //   if (!emailOk(data.get("email")||"")) errs.email = "Enter a valid email.";
+  //   if (!(data.get("company")||"").trim()) errs.company = "Please enter your company.";
+  //   if (!phoneOk(data.get("phone")||"")) errs.phone = "Enter a valid phone, or leave blank.";
+  //   if (!form.consent.checked) errs.consent = "Consent is required.";
+
+  //   document.querySelectorAll(".err").forEach(el => el.style.display = "none");
+  //   Object.entries(errs).forEach(([k,msg])=>{
+  //     const el = document.querySelector(`.err[data-err="${k}"]`);
+  //     if (el){ el.textContent = msg; el.style.display = "block"; }
+  //   });
+  //   if (Object.keys(errs).length) return;
+
+  //   // Submit to Apps Script and show success (no redirect)
+  //   try{
+  //     await fetch(ENDPOINT_URL, { method:"POST", mode:"no-cors", body:data });
+    
+  //     // Determine current language
+  //     const saved = localStorage.getItem("renochain_lang");
+  //     const fallback = (navigator.language || "en").toLowerCase().startsWith("sv") ? "sv" : "en";
+  //     const lang = saved || fallback;
+  //     const dict = i18n[lang] || i18n.en;
+    
+  //     // Personalize with name if present
+  //     const rawName = (data.get("name") || "").trim();
+  //     const namePart = rawName ? `, ${rawName}` : "";
+  //     const msg = (dict.success_msg || "Thank you. Please check your inbox for the video link.")
+  //                  .replace("{NAME}", namePart);
+    
+  //     // Disable inputs to prevent double submits
+  //     const btn = document.getElementById("submit-btn");
+  //     if (btn) { btn.disabled = true; btn.style.opacity = .7; btn.style.cursor = "default"; }
+  //     form.querySelectorAll("input, select, textarea").forEach(el => el.disabled = true);
+    
+  //     // Show tick + message
+  //     const success = document.getElementById("success");
+  //     const successTextEl = document.getElementById("successText");
+  //     const successHintEl = document.getElementById("successHint");
+  //     if (successTextEl) successTextEl.textContent = msg;
+  //     if (successHintEl) successHintEl.textContent = dict.success_hint || "";
+  //     if (success) {
+  //       success.style.display = "flex";
+  //       success.classList.add("show");   //  trigger animation
+  //       success.scrollIntoView({ behavior: "smooth", block: "center" });
+  //     }
+    
+  //     // No redirect; Mailchimp will send the email with the video link.
+  //   }catch(err){
+  //     alert(lang === "sv"
+  //       ? "Något gick fel när formuläret skickades. Försök igen."
+  //       : "Something went wrong submitting the form. Please try again.");
+  //     console.error(err);
+  //   }
+  // });
 
   // ===== Vimeo endcard control =====
   (function setupEndcard(){
