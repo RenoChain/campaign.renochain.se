@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy Policy – RenoChain</title>
+  <style>
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      margin: 40px auto;
+      max-width: 800px;
+      padding: 0 20px;
+      line-height: 1.6;
+      color: #0f1b14;
+      background: #f5f7f6;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+    h2 {
+      margin-top: 28px;
+      font-size: 20px;
+    }
+    p {
+      margin-bottom: 12px;
+    }
+    .lang-switch {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .lang {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      font-weight: 600;
+      background: #fff;
+    }
+    .lang.active {
+      background: linear-gradient(135deg, #6cc24a, #9bd84f);
+      color: #07120a;
+      border-color: transparent;
+    }
+  </style>
+</head>
+<body>
+  <!-- Language Switch -->
+  <div class="lang-switch">
+    <button type="button" data-lang="en" class="lang">EN</button>
+    <button type="button" data-lang="sv" class="lang">SV</button>
+  </div>
+
+  <!-- Swedish -->
+  <div id="policy-sv" class="policy" style="display:none">
+    <h1>Integritetspolicy – RenoChain</h1>
+    <p>Vi på RenoChain värnar om din personliga integritet. Här beskriver vi hur vi samlar in och använder dina personuppgifter.</p>
+    
+    <h2>Vilka uppgifter samlar vi in?</h2>
+    <p>Vi samlar in de uppgifter du själv lämnar till oss, till exempel namn och e-postadress när du fyller i våra formulär eller anmäler dig till vårt nyhetsbrev.</p>
+
+    <h2>Varför samlar vi in uppgifter?</h2>
+    <p>Vi använder uppgifterna för att:</p>
+    <ul>
+      <li>Skicka nyhetsbrev och information om våra tjänster och erbjudanden.</li>
+      <li>Följa upp och administrera dina förfrågningar.</li>
+    </ul>
+
+    <h2>Rättslig grund</h2>
+    <p>Behandlingen sker med stöd av ditt samtycke. Du kan när som helst återkalla ditt samtycke genom att avregistrera dig via länken i våra utskick eller kontakta oss.</p>
+
+    <h2>Hur länge sparar vi uppgifterna?</h2>
+    <p>Vi sparar dina personuppgifter så länge du är prenumerant på vårt nyhetsbrev eller tills du återkallar ditt samtycke.</p>
+
+    <h2>Delning av uppgifter</h2>
+    <p>Vi delar inte dina personuppgifter med andra företag, förutom om vi använder betrodda tjänsteleverantörer (t.ex. för e-postutskick). Dessa får endast använda uppgifterna enligt våra instruktioner.</p>
+
+    <h2>Dina rättigheter</h2>
+    <p>Du har rätt att:</p>
+    <ul>
+      <li>Begära ett utdrag av de uppgifter vi har om dig.</li>
+      <li>Få felaktiga uppgifter rättade.</li>
+      <li>Begära att vi raderar dina uppgifter.</li>
+    </ul>
+
+    <h2>Kontakt</h2>
+    <p>RenoChain<br>
+    E-post: info@renochain.se</p>
+  </div>
+
+  <!-- English -->
+  <div id="policy-en" class="policy" style="display:none">
+    <h1>Privacy Policy – RenoChain</h1>
+    <p>At RenoChain, we value your privacy. This policy explains how we collect and use your personal data.</p>
+    
+    <h2>What information do we collect?</h2>
+    <p>We collect the information you provide to us, such as your name and email address when you fill out our forms or subscribe to our newsletter.</p>
+
+    <h2>Why do we collect this information?</h2>
+    <p>We use your information to:</p>
+    <ul>
+      <li>Send newsletters and information about our services and offers.</li>
+      <li>Follow up on and manage your requests.</li>
+    </ul>
+
+    <h2>Legal basis</h2>
+    <p>The processing of your data is based on your consent. You can withdraw your consent at any time by unsubscribing via the link in our emails or by contacting us directly.</p>
+
+    <h2>How long do we keep your information?</h2>
+    <p>We keep your personal data for as long as you subscribe to our newsletter, or until you withdraw your consent.</p>
+
+    <h2>Sharing of information</h2>
+    <p>We do not share your personal data with other companies, except when we use trusted service providers (e.g. for email distribution). They may only use the data according to our instructions.</p>
+
+    <h2>Your rights</h2>
+    <p>You have the right to:</p>
+    <ul>
+      <li>Request a copy of the personal data we hold about you.</li>
+      <li>Have incorrect data corrected.</li>
+      <li>Request that we delete your data.</li>
+    </ul>
+
+    <h2>Contact</h2>
+    <p>RenoChain<br>
+    Email: info@renochain.se</p>
+  </div>
+
+  <script>
+    function applyLang(lang){
+      document.querySelectorAll(".lang").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.lang === lang);
+      });
+      document.querySelectorAll(".policy").forEach(p => p.style.display = "none");
+      document.getElementById("policy-" + lang).style.display = "block";
+      localStorage.setItem("renochain_lang", lang);
+    }
+
+    (function init(){
+      const saved = localStorage.getItem("renochain_lang");
+      const fallback = (navigator.language || "en").toLowerCase().startsWith("sv") ? "sv" : "en";
+      applyLang(saved || fallback);
+
+      document.addEventListener("click", e => {
+        const btn = e.target.closest(".lang");
+        if(!btn) return;
+        applyLang(btn.dataset.lang);
+      });
+    })();
+  </script>
+</body>
+</html>
