@@ -143,7 +143,11 @@
       outline-offset:2px;
     }
 
-    input::placeholder, textarea::placeholder{color:#6b7280}
+    /* Hide placeholder text while the field is focused */
+    input:focus::placeholder,
+    textarea:focus::placeholder {
+      color: transparent;     /* or: opacity: 0; */
+    }
     .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     @media (max-width: 520px){.row{grid-template-columns:1fr}}
 
