@@ -102,6 +102,23 @@
     .how::before{background-image:url('/RCS.png');opacity:.40}
     }
 
+    /* Collapsible “How it works” summary line */
+    details.how-toggle{display:block}
+    details.how-toggle summary{
+      list-style:none;cursor:pointer;user-select:none;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:8px 12px;border:1px solid var(--border);border-radius:10px;
+      background:rgba(255,255,255,.9);
+    }
+    details.how-toggle summary::-webkit-details-marker{display:none}
+    details.how-toggle summary::after{
+      content:"▾"; font-size:14px; transition:transform .2s ease;
+      margin-left:12px; color:var(--muted);
+    }
+    details.how-toggle[open] summary::after{ transform:rotate(180deg) }
+    details.how-toggle .steps{ margin-top:12px }
+    /* End collapsible */
+    
     /* -------------------- */
     /* Call-to-action area */
     /* -------------------- */
@@ -157,45 +174,39 @@
   </div>
   <!-- Link to Swedish-language page if available -->
   <p class="sub" style="margin-top:10px">Prefer Swedish? <a class="inline" href="/se/video">Visa videon på svenska</a></p>
-  <!-- Back link for users arriving from a form page -->
-  <a class="inline" href="/">← Back to form</a>
   </article>
-
-  <!-- About section (copy aligned to your process) -->
-  <section id="about" class="card" aria-labelledby="about-title">
-  <div class="kicker">About</div> <!-- Small section label -->
-  <h2 id="about-title" class="section-title">What is RenoChain?</h2> <!-- Section title -->
-  <p>RenoChain transforms façade and envelope renovation into a predictable, industrialized flow. We start with a rapid scan to create a digital twin, generate an engineered wall system and instant quote, manufacture in a balanced smart‑factory setup, and complete installation in weeks—not months.</p> <!-- Overview paragraph tailored to the process -->
-  </section>
-
-  <!-- How-it-works with decorative process artwork in the background -->
+    
+  <!-- How it works (collapsed by default) -->
   <section class="card how" aria-labelledby="how-title">
-  <div class="kicker">How it works</div> <!-- Section label -->
-  <h2 id="how-title" class="section-title">Our process — Scan → Builder → System → Factory → Install</h2> <!-- Descriptive title -->
-  <!-- The background images are applied via CSS pseudo-elements; content below is the readable steps list. -->
-  <div class="steps">
-  <!-- Step 1: RenoChain Scan -->
-  <div class="step"><div class="no" aria-hidden="true">1</div><div><strong>RenoChain Scan.</strong> We quickly scan the building to extract measurements and volumes. A high‑fidelity digital twin is created for engineering and costing.</div></div>
-  <!-- Step 2: RenoChain Builder -->
-  <div class="step"><div class="no" aria-hidden="true">2</div><div><strong>RenoChain Builder.</strong> Our software imports the scan model and constructs a new, energy‑efficient wall system. A complete, itemized quote is typically ready in ~30 minutes.</div></div>
-  <!-- Step 3: RenoChain System -->
-  <div class="step"><div class="no" aria-hidden="true">3</div><div><strong>RenoChain System.</strong> The building system is engineered to be cost‑effective, sustainable, and climate‑smart with standardized interfaces and verified performance.</div></div>
-  <!-- Step 4: RenoChain Factory -->
-  <div class="step"><div class="no" aria-hidden="true">4</div><div><strong>RenoChain Factory.</strong> A smart‑factory approach balances automation with skilled craftsmanship to deliver consistent quality, fair production, and reliable lead times.</div></div>
-  <!-- Step 5: RenoChain Install -->
-  <div class="step"><div class="no" aria-hidden="true">5</div><div><strong>RenoChain Install.</strong> Professional installation teams complete a full envelope install on an average‑sized property in about three weeks, with standardized QA and documentation.</div></div>
-  </div>
+    <div class="kicker">How it works</div>
+    <details class="how-toggle">
+      <summary>
+        <span id="how-title" class="section-title">Our process — Scan → Builder → System → Factory → Install</span> <!-- Descriptive title -->
+      </summary>
+      <div class="steps">
+        <!-- Step 1: RenoChain Scan -->
+        <div class="step"><div class="no" aria-hidden="true">1</div><div><strong>RenoChain Scan.</strong> We quickly scan the building to extract measurements and volumes. A high-fidelity digital twin is created for engineering and costing.</div></div>
+        <!-- Step 2: RenoChain Builder -->
+        <div class="step"><div class="no" aria-hidden="true">2</div><div><strong>RenoChain Builder.</strong> Our software imports the scan model and constructs a new, energy-efficient wall system. A complete, itemized quote is typically ready in ~30 minutes.</div></div>
+        <!-- Step 3: RenoChain System -->
+        <div class="step"><div class="no" aria-hidden="true">3</div><div><strong>RenoChain System.</strong> The building system is engineered to be cost-effective, sustainable, and climate-smart with standardized interfaces and verified performance.</div></div>
+        <!-- Step 4: RenoChain Factory -->
+        <div class="step"><div class="no" aria-hidden="true">4</div><div><strong>RenoChain Factory.</strong> A smart-factory approach balances automation with skilled craftsmanship to deliver consistent quality, fair production, and reliable lead times.</div></div>
+        <!-- Step 5: RenoChain Install -->
+        <div class="step"><div class="no" aria-hidden="true">5</div><div><strong>RenoChain Install.</strong> Professional installation teams complete a full envelope install on an average-sized property in about three weeks, with standardized QA and documentation.</div></div>
+      </div>
+    </details>
   </section>
 
-  <!-- Contact / CTA section with two actions and a one-pager link -->
+  <!-- Contact / CTA -->
   <section id="contact" class="card" aria-labelledby="cta-title">
-  <div class="kicker">Get in touch</div> <!-- Section label -->
-  <h2 id="cta-title" class="section-title">Ready to explore RenoChain?</h2> <!-- Title -->
-  <div class="cta"> <!-- Horizontal button layout -->
-  <a class="btn" href="/book-demo">Book a 30‑min walkthrough</a> <!-- Primary CTA -->
-  <a class="btn ghost" href="mailto:hej@renochain.se">Email us</a> <!-- Secondary CTA -->
-  <span class="sub">Or grab the <a class="inline" href="/one-pager.pdf">one‑pager</a>.</span> <!-- Alternative action -->
-  </div>
+    <div class="kicker">Get in touch</div>  <!-- Section label -->
+    <h2 id="cta-title" class="section-title">Ready to explore RenoChain?</h2>  <!-- Title -->
+    <div class="cta">
+      <!-- Request a Demo: opens email with subject -->
+      <a class="btn" href="mailto:hej@renochain.se?subject=Request%20a%20Demo">Request a Demo</a>
+      <a class="btn ghost" href="mailto:hej@renochain.se">Email us</a>
+    </div>
   </section>
 
   <!-- Footer shows copyright; year is filled by tiny JS below -->
