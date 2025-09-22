@@ -47,7 +47,10 @@
     /* Brand lockup: logo and wordmark */
     .brand{display:flex;gap:12px;align-items:center}
     /* Logo sizing with soft rounding */
-    .brand img{height:52px;border-radius:10px}
+    .brand img{height: clamp(60px, 8vw, 84px);  /* min 60px, scales up, max 84px */
+      width: auto;                     /* keep aspect ratio crisp */
+      border-radius: 10px;
+    }
     /* Small helper line under the brand */
     .tag{font-size:12px;color:var(--muted)}
     /* Generic card container */
@@ -159,7 +162,6 @@
         <!-- Wordmark and small campaign tag line -->
         <div>
           <strong>RenoChain</strong>  <!-- Bold brand name for emphasis -->
-          <div class="tag">Million Program Renovation — Video (English)</div>  <!-- Context line -->
         </div>
       </div>
     </header>
