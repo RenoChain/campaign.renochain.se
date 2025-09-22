@@ -21,6 +21,10 @@
   <meta property="og:image" content="/RenoChain_Logo_500X.png" />
   <meta property="twitter:card" content="summary_large_image" />
 
+  <link rel="alternate" hreflang="en" href="https://campaign.renochain.se/video-eng/">
+  <link rel="alternate" hreflang="sv" href="https://campaign.renochain.se/video-sv/">
+  <link rel="alternate" hreflang="x-default" href="https://campaign.renochain.se/video-eng/">
+
   <!-- =====================
   Page styles (CSS)
   ===================== -->
@@ -47,12 +51,13 @@
     /* Brand lockup: logo and wordmark */
     .brand{display:flex;gap:12px;align-items:center}
     /* Logo sizing with soft rounding */
-    .brand img{height: clamp(60px, 8vw, 84px);  /* min 60px, scales up, max 84px */
+    .brand img{
+      max-height:60px;   /* 15% bigger but responsive */
       width: auto;                     /* keep aspect ratio crisp */
       border-radius: 10px;
     }
     /* Small helper line under the brand */
-    .tag{font-size:12px;color:var(--muted)}
+    .tag{font-size:20px;margin:0}
     /* Generic card container */
     .card{background:var(--card);border:1px solid rgba(0,0,0,.08);border-radius:18px;padding:22px}
     /* H1 style for main block headings */
@@ -175,7 +180,9 @@
   <iframe src="https://player.vimeo.com/video/1120085403?h=06ae2ee546&badge=0&autopause=0&player_id=0&app_id=58479" title="RenoChain Video EN" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
   </div>
   <!-- Link to Swedish-language page if available -->
-  <p class="sub" style="margin-top:10px">Prefer Swedish? <a class="inline" href="/se/video">Visa videon på svenska</a></p>
+  <p class="sub" style="margin-top:10px">
+    Prefer Swedish? 
+    <a class="inline" href="https://campaign.renochain.se/video-sv/">Visa videon på svenska</a></p>
   </article>
     
   <!-- How it works (collapsed by default) -->
