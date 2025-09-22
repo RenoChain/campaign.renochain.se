@@ -13,6 +13,10 @@
   <meta property="og:type" content="website" />
   <meta property="og:image" content="/RenoChain_Logo_500X.png" />
   <meta property="twitter:card" content="summary_large_image" />
+
+  <link rel="alternate" hreflang="en" href="https://campaign.renochain.se/video-eng/">
+  <link rel="alternate" hreflang="sv" href="https://campaign.renochain.se/video-sv/">
+  <link rel="alternate" hreflang="x-default" href="https://campaign.renochain.se/video-eng/">
   
   <style>
     :root{--text:#0f1b14;--muted:#5e6b63;--bg:#f5f7f6;--card:#fff;--border:rgba(0,0,0,.08);--primary:#2563eb}
@@ -21,36 +25,76 @@
     .shell{max-width:1100px;margin:0 auto;padding:28px}
     header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
     .brand{display:flex;gap:12px;align-items:center}
-    .brand img{height:52px;border-radius:10px}
+    .brand img{
+      max-height:60px;   /* 15% bigger but responsive */
+      width: auto;                     /* keep aspect ratio crisp */
+      border-radius: 10px;
+    }
     .tag{font-size:12px;color:var(--muted)}
-    
     .card{background:var(--card);border:1px solid rgba(0,0,0,.08);border-radius:18px;padding:22px}
     .headline{font-size:32px;margin:8px 0 14px}
     .sub{font-size:14px;color:var(--muted);margin-top:6px}
-    
     .video{aspect-ratio:16/9;border-radius:14px;overflow:hidden;border:1px solid rgba(0,0,0,.08);background:#000}
     .video iframe,.video video{width:100%;height:100%;display:block}
-    
     a.inline{color:var(--primary);text-decoration:none}
     section{margin-top:22px}
     .section-title{font-size:22px;margin:0 0 10px}
     .kicker{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-    
     .steps{display:grid;gap:10px}
     .step{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.88);border:1px solid var(--border);border-radius:12px;padding:12px}
     .step .no{width:30px;height:30px;border-radius:10px;background:#eaf0ff;display:grid;place-items:center;font-weight:600}
     
-    /* How it works background artwork */
-    .how{position:relative;overflow:hidden;background:transparent}
-    .how::before{content:"";position:absolute;inset:0;background-image:url('/RCS_Wide.png');background-size:cover;background-position:center;background-repeat:no-repeat;opacity:.35;filter:saturate(1) contrast(1.05);z-index:0}
-    .how::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,.20), rgba(255,255,255,.45));z-index:1}
-    .how>*{position:relative;z-index:2}
-    @media (max-width:900px){.how::before{background-image:url('/RCS.png');opacity:.40}}
-    
+    /* ------------------------------------------------------- */
+    /* HOW-IT-WORKS background using supplied process visuals */
+    /* ------------------------------------------------------- */
+    .how{position:relative;overflow:hidden;background:transparent;} /* Create a stacking context for pseudo elements */
+    /* Decorative background layer with the super-wide image */
+    .how::before{content:"";position:absolute;inset:0; /* Cover the section */
+    background-image:url('/RCS_Wide.png'); /* Desktop artwork */
+    background-size:cover; /* Fill while preserving ratio */
+    background-position:center; /* Keep center in view */
+    background-repeat:no-repeat; /* Prevent tiling */
+    opacity:.35; /* Make subtle */
+    filter:saturate(1) contrast(1.05) /* Slight pop without overpowering */
+    z-index:0;  /* put behind overlay + content */
+    }
+    /* Top-to-bottom white veil to ensure text contrast */
+    .how::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.92));z-index:1;}
+    /* Lift actual section content above bg layers */
+    .how > *{position:relative;z-index:2;}
+    /* Swap to the less-wide artwork on small screens for better cropping */
+    @media (max-width: 900px){
+    .how::before{background-image:url('/RCS.png');opacity:.40}
+    }
+
+    /* Collapsible “How it works” summary line */
+    details.how-toggle{display:block}
+    details.how-toggle summary{
+      list-style:none;cursor:pointer;user-select:none;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:8px 12px;border:1px solid var(--border);border-radius:10px;
+      background:rgba(255,255,255,.9);
+    }
+    details.how-toggle summary::-webkit-details-marker{display:none}
+    details.how-toggle summary::after{
+      content:"▾"; font-size:14px; transition:transform .2s ease;
+      margin-left:12px; color:var(--muted);
+    }
+    details.how-toggle[open] summary::after{ transform:rotate(180deg) }
+    details.how-toggle .steps{ margin-top:12px }
+    /* End collapsible */
+
+    /* -------------------- */
+    /* Call-to-action area */
+    /* -------------------- */
     .cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    /* Primary button */
     .btn{display:inline-block;background:var(--primary);color:#fff;text-decoration:none;padding:10px 14px;border-radius:10px;border:1px solid rgba(0,0,0,.1)}
+    /* Secondary (ghost) button */
     .ghost{background:#eef2ff;color:#183066}
+    /* Footer text styling */
     footer{margin:28px 0 0;color:var(--muted);font-size:12px;text-align:center}
+    a.back{display:inline-block;margin-top:14px;color:#2563eb;text-decoration:none}
   </style>
 
   <script type="application/ld+json">
@@ -60,7 +104,7 @@
   "name":"RenoChain — Lång version (svenska)",
   "description":"En genomgång av RenoChain och hur vi accelererar miljonprogramsrenovering.",
   "thumbnailUrl":["/RenoChain_Logo_500X.png"],
-  "uploadDate":"2025-01-01",
+  "uploadDate":"2025-09-21",
   "publisher":{"@type":"Organization","name":"RenoChain"},
   "embedUrl": "https://player.vimeo.com/video/1120086264?h=425f539af6"
   }
@@ -73,7 +117,7 @@
       <div class="brand">
         <img src="/RenoChain_Logo_500X.png" alt="RenoChain logotyp" />
         <div>
-          <strong>RenoChain</strong><div class="tag">Miljonprogramsrenovering — Video (Svenska)</div>
+          <strong>RenoChain</strong>
         </div>
       </div>
     </header>
@@ -91,35 +135,33 @@
         allowfullscreen>
       </iframe>
       </div>
-      <p class="sub" style="margin-top:10px">Föredrar du engelska? <a class="inline" href="/video-eng/">Se videon på engelska</a></p>
-      <a class="inline" href="/">← Tillbaka till formuläret</a>
+      <p class="sub" style="margin-top:10px">
+        Föredrar du engelska? 
+        <a class="inline" href="https://campaign.renochain.se/video-eng/">Se videon på engelska</a></p>
     </article>
-    
-    <section id="about" class="card" aria-labelledby="about-title">
-      <div class="kicker">Om</div>
-      <h2 id="about-title" class="section-title">Vad är RenoChain?</h2>
-      <p>RenoChain transformerar fasad- och klimatskalsrenovering till ett förutsägbart, industrialiserat flöde. Vi börjar med en snabb skanning för att skapa en digital tvilling, tar fram ett konstruerat väggsystem och en omedelbar offert, producerar i en balanserad smartfabrik och färdigställer installationen på veckor – inte månader.</p>
-    </section>
     
     <section class="card how" aria-labelledby="how-title">
       <div class="kicker">Så fungerar det</div>
-      <h2 id="how-title" class="section-title">Vår process — Scan → Builder → System → Factory → Install</h2>
-      <div class="steps">
-      <div class="step"><div class="no" aria-hidden="true">1</div><div><strong>RenoChain Scan.</strong> Vi skannar byggnaden snabbt för att ta fram mått och volymer. En högupplöst digital tvilling skapas för konstruktion och kalkyl.</div></div>
-      <div class="step"><div class="no" aria-hidden="true">2</div><div><strong>RenoChain Builder.</strong> Vårt program importerar skanningsmodellen och konstruerar ett nytt, energieffektivt väggsystem. En komplett, specificerad offert är normalt klar på ~30 minuter.</div></div>
-      <div class="step"><div class="no" aria-hidden="true">3</div><div><strong>RenoChain System.</strong> Byggsystemet är utvecklat för att vara kostnadseffektivt, hållbart och klimatsmart – med standardiserade gränssnitt och verifierad prestanda.</div></div>
-      <div class="step"><div class="no" aria-hidden="true">4</div><div><strong>RenoChain Factory.</strong> En smart fabriksuppläggning balanserar automation med yrkesskicklighet för jämn kvalitet, rättvis produktion och tillförlitliga ledtider.</div></div>
-      <div class="step"><div class="no" aria-hidden="true">5</div><div><strong>RenoChain Install.</strong> Våra montageteam slutför en komplett installation på en genomsnittlig fastighet på cirka tre veckor, med standardiserad egenkontroll och dokumentation.</div></div>
-      </div>
+      <details class="how-toggle">
+      <summary>
+        <span id="how-title" class="section-title">Vår process — Scan → Builder → System → Factory → Install</span> <!-- Descriptive title -->
+      </summary>
+        <div class="steps">
+        <div class="step"><div class="no" aria-hidden="true">1</div><div><strong>RenoChain Scan.</strong> Vi skannar byggnaden snabbt för att ta fram mått och volymer. En högupplöst digital tvilling skapas för konstruktion och kalkyl.</div></div>
+        <div class="step"><div class="no" aria-hidden="true">2</div><div><strong>RenoChain Builder.</strong> Vårt program importerar skanningsmodellen och konstruerar ett nytt, energieffektivt väggsystem. En komplett, specificerad offert är normalt klar på ~30 minuter.</div></div>
+        <div class="step"><div class="no" aria-hidden="true">3</div><div><strong>RenoChain System.</strong> Byggsystemet är utvecklat för att vara kostnadseffektivt, hållbart och klimatsmart – med standardiserade gränssnitt och verifierad prestanda.</div></div>
+        <div class="step"><div class="no" aria-hidden="true">4</div><div><strong>RenoChain Factory.</strong> En smart fabriksuppläggning balanserar automation med yrkesskicklighet för jämn kvalitet, rättvis produktion och tillförlitliga ledtider.</div></div>
+        <div class="step"><div class="no" aria-hidden="true">5</div><div><strong>RenoChain Install.</strong> Våra montageteam slutför en komplett installation på en genomsnittlig fastighet på cirka tre veckor, med standardiserad egenkontroll och dokumentation.</div></div>
+        </div>
+      </details>
     </section>
 
     <section id="contact" class="card" aria-labelledby="cta-title">
       <div class="kicker">Kontakta oss</div>
       <h2 id="cta-title" class="section-title">Redo att utforska RenoChain?</h2>
       <div class="cta">
-      <a class="btn" href="/book-demo">Boka en 30‑minuters genomgång</a>
+      <a class="btn" href="mailto:hej@renochain.se?subject=Request%20a%20Demo">Begär en demo</a>
       <a class="btn ghost" href="mailto:hej@renochain.se">Mejla oss</a>
-      <span class="sub">Eller hämta <a class="inline" href="/one-pager.pdf">produktbladet</a>.</span>
       </div>
     </section>
     
