@@ -427,7 +427,7 @@
           <div class="row">
             <div>
               <label for="company" id="label-company">Company</label>
-              <input id="company" name="company" placeholder="Acme AB" required />
+              <input id="company" name="company" placeholder="Acme AB" />
               <div class="err" data-err="company"></div>
             </div>
             <div>
@@ -476,7 +476,13 @@
             <div id="successHint"></div>
           </div>
         </div>
-
+        <!-- Post-submit CTA (hidden by default; shown after success) -->
+        <div id="watchCta" style="display:none; margin-top:12px;">
+        <button type="button" id="watchBtn" class="btn">
+          <!-- label will be set by JS based on language -->
+          Unlock & Watch
+        </button>
+        </div>
         </form>
       </div>
     </section>
@@ -549,8 +555,18 @@
 
   // ========= CONFIG: Replace with your values =========
   const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbzA0Xe1K2pbpH_ox1T-P7gKrwbSvGk4mh2mmWV74OtxaRkB_4Z8HVTj8zdKYeEVwbiwwg/exec";
-  // ====================================================
-
+  // ======= Where to send users after successful submit =======
+  const VIDEO_URL_EN = "https://campaign.renochain.se/video-eng/";   // TODO: replace with your English page URL
+  const VIDEO_URL_SV = "https://campaign.renochain.se/video-sv/";   // TODO: replace with your Swedish page URL
+  
+  // Lightweight analytics helper (safe no-op if libs are missing)
+  function track(eventName, payload){
+    try {
+      if (window.gtag) window.gtag('event', eventName, payload || {});
+      if (window.plausible) window.plausible(eventName, { props: payload || {} });
+    } catch {}
+  }
+  
   // Fill year
   document.getElementById('yr').textContent = new Date().getFullYear();
 
@@ -629,7 +645,15 @@
     document.addEventListener("click", (e)=>{
       const btn = e.target.closest(".lang");
       if(!btn) return;
-      applyI18n(btn.dataset.lang);
+        const newLang = btn.dataset.lang;
+        applyI18n(newLang);
+      // 👇 NEW: if the post-submit CTA is visible, update its label to match the new language
+      const ctaWrap = document.getElementById("watchCta");
+      const watchBtn = document.getElementById("watchBtn");
+      if (ctaWrap && watchBtn && ctaWrap.style.display !== "none") {
+        const dictNow = i18n[newLang] || i18n.en;
+        watchBtn.textContent = dictNow["submit-btn"] || "Unlock & Watch";
+      }
     });
   })();
 
@@ -725,6 +749,53 @@
         success.style.display = "flex";
         success.classList.add("show");
         success.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      // === Show the post-submit "Unlock & Watch" button and route correctly ===
+      const ctaWrap = document.getElementById("watchCta");
+      const watchBtn = document.getElementById("watchBtn");
+      if (ctaWrap && watchBtn) {
+        // Set the button label in the current language (reuse your i18n submit label)
+        watchBtn.textContent = dict["submit-btn"] || "Unlock & Watch";
+        // Make sure it's visible
+        ctaWrap.style.display = "block";
+        // Move focus to the CTA for quick keyboard/AT access
+        try { watchBtn.focus({ preventScroll: true }); } catch {}
+        // IMPORTANT: ensure the button is enabled even though we disabled inputs
+        watchBtn.disabled = false;
+        watchBtn.style.opacity = 1;
+        watchBtn.style.cursor = "pointer";
+        // Click -> route to language-specific page
+        watchBtn.onclick = () => {
+          // Prevent rapid double clicks
+          if (watchBtn.dataset.busy === "1") return;
+          watchBtn.dataset.busy = "1";
+          watchBtn.disabled = true;
+          
+          watchBtn.style.opacity = 0.8;
+          watchBtn.style.cursor = "default";
+          watchBtn.textContent = (langNow === "sv") ? "Öppnar…" : "Opening…";
+          // Re-read language at click time (handles late language switching)
+          const savedNow = localStorage.getItem("renochain_lang");
+          const fallNow = (navigator.language || "en").toLowerCase().startsWith("sv") ? "sv" : "en";
+          const langNow = savedNow || fallNow;
+        
+          const dest = (langNow === "sv") ? VIDEO_URL_SV : VIDEO_URL_EN;
+          if (!dest || dest === "/video/en.html" || dest === "/video/sv.html") {
+            // Fallback: if you forgot to replace the placeholders, alert and don’t navigate
+            try {
+              alert(langNow === "sv"
+                ? "Videolänken är inte konfigurerad ännu."
+                : "The video link isn’t configured yet.");
+            } catch {}
+            // Reset busy/disabled so user can try again later
+            watchBtn.dataset.busy = "0";
+            watchBtn.disabled = false;
+            return;
+          }
+          // NEW: analytics event (safe if analytics libs aren’t present)
+          track("watch_cta_click", { lang: langNow, dest });
+          window.location.href = dest;
+        };
       }
     }catch(err){
       const saved = localStorage.getItem("renochain_lang");
