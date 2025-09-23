@@ -700,7 +700,7 @@
     const errs = {};
     if (!(data.get("name")||"").trim()) errs.name = "Please enter your name.";
     if (!emailOk(data.get("email")||"")) errs.email = "Enter a valid email.";
-    if (!(data.get("company")||"").trim()) errs.company = "Please enter your company.";
+    // if (!(data.get("company")||"").trim()) errs.company = "Please enter your company.";
     if (!phoneOk(data.get("phone")||"")) errs.phone = "Enter a valid phone, or leave blank.";
     if (!form.consent.checked) errs.consent = "Consent is required.";
 
