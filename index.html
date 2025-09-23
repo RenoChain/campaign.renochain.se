@@ -478,9 +478,9 @@
         </div>
         <!-- Post-submit CTA (hidden by default; shown after success) -->
         <div id="watchCta" style="display:none; margin-top:12px;">
-        <button type="button" id="watchBtn" class="btn">
+        <button type="button" id="watchBtn" class="btn" aria-label="Watch the Video">
           <!-- label will be set by JS based on language -->
-          Unlock & Watch
+          Watch the Video
         </button>
         </div>
         </form>
@@ -515,16 +515,17 @@
       "label-notes": "What are you hoping to learn?",
       "role-placeholder": "Select your role",
       "consent_html":'I consent to my personal data being processed in accordance with the <a href="{URL}" target="_blank" rel="noopener noreferrer">privacy policy</a> and to receiving newsletters and information about services and offers from RenoChain. You can unsubscribe at any time via the link in our emails.',
-      "submit-btn": "Unlock & Watch",
+      "submit-btn": "Subscribe",
+      "cta-watch": "Watch the Video",
       ph_name: "Jane Doe",
       ph_email: "jane@acme.se",
       ph_phone: "+46 70 123 45 67",
       ph_company: "Acme AB",
       ph_notes: "Optional",
       roles: ["CEO / Founder","Operations","Procurement","Project Manager","Engineer","Sales / Marketing","Other"],
-      success_msg: "Thank you {NAME}!. Please check your inbox for the video link.",
+      success_msg: "Thank you {NAME} for registering.",
       success_hint: "If you don’t see the email soon, please also check your spam or junk folder.",
-      privacy_label: "Privacy policy"
+      privacy_label: "Privacy policy",
     },
     sv: {
       headline: "Lås upp hela videon",
@@ -540,14 +541,15 @@
       "label-notes": "Vad vill du få ut?",
       "role-placeholder": "Välj din roll",
       "consent_html":'Jag samtycker till att mina personuppgifter behandlas enligt <a href="{URL}" target="_blank" rel="noopener noreferrer">integritetspolicyn</a> och att jag får nyhetsbrev och information om tjänster och erbjudanden från RenoChain. Du kan när som helst avregistrera dig via länken i våra utskick.',
-      "submit-btn": "Lås upp och titta",
+      "submit-btn": "Prenumerera",
+      "cta-watch": "Se videon",
       ph_name: "Anna Svensson",
       ph_email: "anna@acme.se",
       ph_phone: "+46 70 123 45 67",
       ph_company: "Acme AB",
       ph_notes: "Valfritt",
       roles: ["VD / Grundare","Drift","Inköp","Projektledare","Ingenjör","Sälj / Marknad","Annat"],
-      success_msg: "Tack {NAME}!. Kontrollera din inkorg för videolänken.",
+      success_msg: "Tack {NAME} för att du registrerade dig.",
       success_hint: "Om du inte ser e-postmeddelandet snart, titta även i din skräppostmapp.",
       privacy_label: "Integritetspolicy",
     }
@@ -652,7 +654,7 @@
       const watchBtn = document.getElementById("watchBtn");
       if (ctaWrap && watchBtn && ctaWrap.style.display !== "none") {
         const dictNow = i18n[newLang] || i18n.en;
-        watchBtn.textContent = dictNow["submit-btn"] || "Unlock & Watch";
+        watchBtn.textContent = dictNow["cta-watch"] || "Watch the Video";
       }
     });
   })();
@@ -755,7 +757,7 @@
       const watchBtn = document.getElementById("watchBtn");
       if (ctaWrap && watchBtn) {
         // Set the button label in the current language (reuse your i18n submit label)
-        watchBtn.textContent = dict["submit-btn"] || "Unlock & Watch";
+        watchBtn.textContent = dict["cta-watch"] || "Watch the Video";
         // Make sure it's visible
         ctaWrap.style.display = "block";
         // Move focus to the CTA for quick keyboard/AT access
@@ -770,16 +772,18 @@
           if (watchBtn.dataset.busy === "1") return;
           watchBtn.dataset.busy = "1";
           watchBtn.disabled = true;
-          
-          watchBtn.style.opacity = 0.8;
-          watchBtn.style.cursor = "default";
-          watchBtn.textContent = (langNow === "sv") ? "Öppnar…" : "Opening…";
           // Re-read language at click time (handles late language switching)
           const savedNow = localStorage.getItem("renochain_lang");
           const fallNow = (navigator.language || "en").toLowerCase().startsWith("sv") ? "sv" : "en";
           const langNow = savedNow || fallNow;
-        
+          // Visual feedback (now safe to use langNow 👇)
+          watchBtn.style.opacity = 0.8;
+          watchBtn.style.cursor = "default";
+          watchBtn.textContent = (langNow === "sv") ? "Öppnar…" : "Opening…";
+          watchBtn.setAttribute("aria-busy", "true");
+          // Decide destination
           const dest = (langNow === "sv") ? VIDEO_URL_SV : VIDEO_URL_EN;
+          // Fallback guard: if URLs aren’t configured, alert & re-enable
           if (!dest || dest === "/video/en.html" || dest === "/video/sv.html") {
             // Fallback: if you forgot to replace the placeholders, alert and don’t navigate
             try {
@@ -794,6 +798,7 @@
           }
           // NEW: analytics event (safe if analytics libs aren’t present)
           track("watch_cta_click", { lang: langNow, dest });
+          // Navigate
           window.location.href = dest;
         };
       }
